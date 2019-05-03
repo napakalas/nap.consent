@@ -1,0 +1,2 @@
+recursive-include nap *
+global-exclude *pyc
