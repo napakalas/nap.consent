@@ -14,5 +14,22 @@
       permission="cmf.ManagePortal"
       layer=".controlpanel.IBrowserLayer"
   />
+  
+  <browser:resourceDirectory
+      directory="static"
+      name="nap.consent"
+      layer=".controlpanel.IBrowserLayer"
+  />
+  
+  <browser:viewlet
+      name="nap.consent"
+      manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
+      class=".viewlets.ConsentViewlet"
+      template="consentViewlet.pt"
+      permission="zope2.View"
+      layer=".controlpanel.IBrowserLayer"
+  />
+  
+  
 
 </configure>

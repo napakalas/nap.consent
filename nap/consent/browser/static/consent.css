@@ -1,0 +1,170 @@
+#viewlet-consent {
+    background: #000;
+    bottom: 0;
+    box-sizing: border-box;
+    color: #fff;
+    left: 0;
+    margin: 0 auto;
+    opacity: .92;
+    padding: 1em 2em 1em 1em;
+    position: fixed;
+    right: 0;
+    text-align: left;
+    vertical-align: baseline;
+    width: 100%;
+    z-index: 20180509;
+}
+.consent-text {
+    display: inline-block;
+}
+.consent-title {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+.consent-status {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+.consent-info {
+  background-color: lightblue;
+  height: 200px;
+  overflow: auto;
+}
+    .consent-outer
+	{
+	  background-color: #fff;
+	  color: #fff;
+	  height: 400px;
+      width: 80%;
+	  margin: 0px auto;
+	  padding: 5px;
+	}
+    .separator {
+      position: absolute;
+      left:49.5%;
+      top:0;
+      bottom:0;
+      border-left: 1px dotted #000;
+}
+    .left-inner
+    {
+	  background-color: #efefef;
+	  color: #000;
+	  height: 400px;
+	  width: 49%;
+	  float: left;
+      overflow: auto;
+	}
+    .right-inner
+    {
+	  background-color: #efefef;
+	  color: #000;
+	  height: 400px;
+	  width: 49%;
+      float: right;
+      overflow: auto;
+    }
+    .consent-info {
+      background-color: lightblue;
+      color: darkblue;
+      height: 250px;
+      overflow: auto;
+      margin-top: 0.5em;
+    }
+    table.consent_list td.val {
+      padding-left:15px;
+      padding-top:5px;
+      padding-bottom:5px;
+    }
+    table.consent_list td.num {
+      padding-left:30px;
+      padding-top:5px;
+      padding-bottom:5px;
+      vertical-align: top;
+    }
+    .bts_consent{
+      float: right;
+    }
+    button.button_consent {
+      display: inline-block;
+      border-radius: 4px;
+      background-color: #f4511e;
+      border: none;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 28px;
+      padding: 15px;
+      width: 200px;
+      transition: all 0.5s;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button.button_consent span {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: 0.5s;
+    }
+    button.button_consent span:after {
+      content: '\00bb';
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      right: -20px;
+      transition: 0.5s;
+    }
+    button.button_consent:hover span {
+      padding-right: 25px;
+    }
+    button.button_consent:hover span:after {
+      opacity: 1;
+      right: 0;
+    }
+    
+    button[name="nap.consent.bt.info"] {
+      display: inline-block;
+      border-radius: 4px;
+      background-color: #f4511e;
+      border: none;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 28px;
+      padding: 15px;
+      width: 200px;
+      transition: all 0.5s;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button[name="nap.consent.bt.info"] span {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: 0.5s;
+    }
+    button[name="nap.consent.bt.info"] span:after {
+      content: '\00bb';
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      right: -20px;
+      transition: 0.5s;
+    }
+    button[name="nap.consent.bt.info"]:hover span {
+      padding-right: 25px;
+    }
+    button[name="nap.consent.bt.info"]:hover span:after {
+      opacity: 1;
+      right: 0;
+    }
+
+#viewlet-consent p {
+    border-bottom: 0;
+    padding-bottom: 0;
+    text-align: left;
+}
+#viewlet-consent p a:link,
+#viewlet-consent p a:visited,
+#viewlet-consent p a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
