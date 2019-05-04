@@ -22,5 +22,11 @@
       />
   
   <!-- -*- extra stuff goes here -*- -->
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="nap.consent: uninstall"
+      directory="profiles/uninstall"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
 </configure>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<registry>
+    <records interface="nap.consent.browser.controlpanel.IConsentControlPanel">
+        <value key="enabled">False</value>
+        <value key="title"></value>
+        <value key="text"></value>
+        <value key="deleteData"></value>
+    </records>
+</registry>
+

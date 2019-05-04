@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<registry>
+  <records interface="nap.consent.browser.controlpanel.IConsentControlPanel" remove="true"/>
+</registry>

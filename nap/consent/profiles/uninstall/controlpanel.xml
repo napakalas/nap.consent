@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="portal_controlpanel" purge="False">
+  <configlet title="Consent Settings"
+      action_id="consent-controlpanel"
+      appId="consent-controlpanel"
+      category="Products"
+      remove="true"
+      />
+</object>
