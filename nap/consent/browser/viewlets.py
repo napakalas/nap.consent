@@ -30,7 +30,7 @@ class ConsentViewlet(ViewletBase):
             return ''
         else:
             return str(api.user.get_current())
-        
+
 class SurveyViewlet(ViewletBase):
     def __init__(self, context, request, view, manager):
         super(SurveyViewlet, self).__init__(context, request, view, manager)
@@ -127,3 +127,6 @@ class SurveyViewlet(ViewletBase):
     
     def getManager(self):
         return self.manager
+    
+
+    

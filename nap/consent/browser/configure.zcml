@@ -30,7 +30,7 @@
       layer=".controlpanel.IBrowserLayer"
   />
   
-    <browser:viewlet
+  <browser:viewlet
       name="nap.survey"
       manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
       class=".viewlets.SurveyViewlet"
@@ -56,5 +56,5 @@
       permission="zope2.View"
       layer=".controlpanel.IBrowserLayer"
   />
-
+      
 </configure>

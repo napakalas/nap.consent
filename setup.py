@@ -36,7 +36,7 @@ tests_require = ['zope.testing']
 
 setup(name='nap.consent',
       version=version,
-      description="PMR Survey - Collect User's feedback",
+      description="This is a consent form for collecting users' agrrement",
       long_description=long_description,
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers

@@ -15,9 +15,9 @@
   <!-- Register the installation GenericSetup extension profile -->
   <genericsetup:registerProfile
       name="default"
-      title="PMR Survey"
+      title="Project Consent"
       directory="profiles/default"
-      description="PMR Survey - Collect User's feedback"
+      description="This is a consent form for collecting users' agreement"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
   
@@ -28,5 +28,5 @@
       directory="profiles/uninstall"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-
+      
 </configure>
