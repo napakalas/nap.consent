@@ -7,7 +7,7 @@
     getSessionId view/getSessionId;
     getCookieId view/getCookieId;
   ">
-    <!--div id="div_info">
+    <div id="div_info">
         <div>Prev User :<span tal:content="view/prevUser"></span></div>
         <div>Session ID :<span tal:content="view/getSessionId"></span></div>
         <div>Session Data :<span tal:content="view/getSession"></span></div>
@@ -17,7 +17,9 @@
         <div>View :<span tal:content="view/getView"></span></div>
         <div>Manager :<span tal:content="view/getManager"></span></div>
         <div>Q Type :<span tal:content="view/getQuestionType"></span></div>
-    </div-->
+        <div>Portal :<span tal:content="view/getPortal"></span></div>
+        <div>Absolute URL :<span tal:content="view/getAbsoluteUrl"></span></div>
+    </div>
     
     <div id="question-type">
         <div class="question" tal:content="view/getQuestionText">
@@ -38,8 +40,8 @@
             <span tal:content="view/getHigh">high level</span>
             <span tal:define="qstTpy view/getQuestionType" tal:condition="python: qstTpy == 2">
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="radio5" name="radioLikert" value="5">
-                <label for="radio5">NA</label>
+                <input type="radio" id="radioNA" name="radioLikert" value="NA">
+                <label for="radioNA">NA</label>
             </span>
         </div>
         <div id="radio-type3" class="radio-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 3">
@@ -179,6 +181,7 @@
     }
     
     $("button[name='nap.consent.bt.close']").click(function (event) {
+        //setting all cookies
         $("#viewlet-survey").hide();
     });
   });

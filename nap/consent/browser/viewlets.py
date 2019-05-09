@@ -45,6 +45,7 @@ class SurveyViewlet(ViewletBase):
         self.settings = getUtility(IRegistry).forInterface(IConsentControlPanel)
         # get information from cookies
         self.collectCookies()
+        self.ann = Tools.getRootAnn()
         
     #DATA OUT FOR CLIENT#
     def enabled(self):
@@ -128,5 +129,12 @@ class SurveyViewlet(ViewletBase):
     def getManager(self):
         return self.manager
     
-
+    def getPortal(self):
+        return api.portal.get()
+    
+    def getParent(self):
+        return self.__parent__
+    
+    def getAbsoluteUrl(self):
+        return self.context.absolute_url() + ' ' + self.request["ACTUAL_URL"] + ' ' + self.request["URL"] + ' ' + self.request["QUERY_STRING"]
     

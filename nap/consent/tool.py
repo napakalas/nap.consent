@@ -1,6 +1,7 @@
 from zope.annotation.interfaces import IAnnotations
 from .content.survey import Survey
 from .content.question import QType
+from plone import api
 
 class Tools:
     survey = Survey()
@@ -32,5 +33,9 @@ class Tools:
         Tools.survey.addQuestion(QType.likert_2, 'If you are looking for information using browse facility and if this is the page you are looking for, how easy is it to find information with browsing facilities compared to search facilities?', 'very difficult', 'very easy')
         return Tools.survey
         
-        
+    @staticmethod
+    def getRootAnn():
+        portal = api.portal.get()
+        annotations = IAnnotations(portal)
+        return annotations
     

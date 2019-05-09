@@ -12,6 +12,12 @@ from .question import Question
 from .question import QType
 import random
 
+class PType:
+    general = 1
+    browse = 2
+    search = 3
+    document = 4
+
 class ISurvey(Interface):
     """A survey for PMR."""
 
@@ -48,3 +54,16 @@ class Survey(Implicit, Persistent, RoleManager, Item):
     def getQuestionTot(self):
         return len(self.__questions)
 
+    def getPageType(self, context_, view_, actUrl_, url_):
+        context = (str(context_)).lower()
+        view = (str(view_)).lower()
+        actUrl = (str(actUrl_)).lower()
+        url = (str(url_)).lower()    
+        wordsDocument = ['exposurefile at','workspace at','exposure at']
+        wordsBrowser = ['workspacecontainer at','exposurecontainer at']
+        wordsBrowser2 = ['calcium_dynamics','cardiovascular_circulation','cell_cycle','cell_migration','circadian_rhythms','electrophysiology','endocrine','excitation-contraction_coupling','gene_regulation','hepatology','immunology','ion_transport','mechanical_constitutive_laws','metabolism','myofilament_mechanics','neurobiology','ph_regulation','pkpd','protein_modules','signal_transduction','synthetic_biology']
+        if 'search.pt' in view:
+            return PType.search
+    #    else if any(word in ctx for word in wordsDocument):
+    #        return PType.document
+        
