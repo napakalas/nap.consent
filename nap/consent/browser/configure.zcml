@@ -56,5 +56,21 @@
       permission="zope2.View"
       layer=".controlpanel.IBrowserLayer"
   />
-      
+  
+  <browser:page
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      name="survey_result_form"
+      permission="cmf.ManagePortal"
+      class=".surveyResult.SurveyResultView"
+      template="surveyResult.pt"
+  />
+  
+  <browser:view
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      name="survey_csv"
+      permission="cmf.ManagePortal"
+      class=".surveyResult.SurveyCsv"
+  />
+  
+    
 </configure>

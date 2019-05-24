@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts">
+    <javascript id="++resource++nap.consent/consent.js"
+        enabled="True"
+        cookable="True"
+        inline="False"
+        compression="safe"
+        cacheable="True"
+        remove="true"/>
+    <javascript id="++resource++nap.consent/survey.js"
+        enabled="True"
+        cookable="True"
+        inline="False"
+        compression="safe"
+        cacheable="True"
+        remove="true"/>
+    
+</object>

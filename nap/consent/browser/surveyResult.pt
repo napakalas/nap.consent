@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="ora.objects"
+      tal:define="foo view/update">
+<body>
+    <div metal:fill-slot="main">
+        <tal:main-macro metal:define-macro="main">
+
+                <h1 class="documentFirstHeading">
+                    Feedback Summary and Download
+                </h1>
+
+                <p class="documentDescription">
+                    You can download the result by pressing download button. Be careful with Clean up button !!! It will erase all feedback.
+                </p>
+
+                <div tal:define="summary view/getSummary">
+                    <div tal:repeat="rep summary" tal:content="rep"></div>
+                </div>
+                <br>
+                <br>
+                <div>
+                <a href="link" tal:attributes="href view/getDownloadLink"> Download Feedback </a>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <form action="@@survey_result_form" method="POST">
+                    <button type="submit" name="clearAll">
+                        Be ware, it will clean up all data
+                    </button>
+                </form>
+                
+                
+
+        </tal:main-macro>
+    </div>
+</body>
+</html>

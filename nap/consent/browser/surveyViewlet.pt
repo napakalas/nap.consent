@@ -3,226 +3,96 @@
     data-enabled view/enabled;
     isAgree view/isAgree; 
     prevUser view/prevUser;
-    isLogin view/isLogin;
     getSessionId view/getSessionId;
     getCookieId view/getCookieId;
+    isQstAvailable view/isQstAvailable;
   ">
+    <link href="survey.css" rel="stylesheet" tal:attributes="href string:${view/site_url}/++resource++nap.consent/survey.css">
     <div id="div_info">
-        <div>Prev User :<span tal:content="view/prevUser"></span></div>
+        <!--div>Prev User :<span tal:content="view/prevUser"></span></div>
         <div>Session ID :<span tal:content="view/getSessionId"></span></div>
         <div>Session Data :<span tal:content="view/getSession"></span></div>
         <div>Cookie Data :<span tal:content="view/getCookieId"></span></div>
-        <div>Counter :<span tal:content="view/getCount"></span></div>
         <div>Context :<span tal:content="view/getContext"></span></div>
         <div>View :<span tal:content="view/getView"></span></div>
         <div>Manager :<span tal:content="view/getManager"></span></div>
-        <div>Q Type :<span tal:content="view/getQuestionType"></span></div>
         <div>Portal :<span tal:content="view/getPortal"></span></div>
-        <div>Absolute URL :<span tal:content="view/getAbsoluteUrl"></span></div>
+        <div>Absolute URL :<span tal:content="view/getAbsoluteUrl"></span></div-->
+        <div>Answers :<span tal:content="view/getAnswers"></span></div>
     </div>
     
-    <div id="question-type">
+    <div id="question-type" tal:define="isQstAvailable view/isQstAvailable" tal:condition="python: isQstAvailable == 'true'">
         <div class="question" tal:content="view/getQuestionText">
             How familiar are you with this website?
         </div>
-        <div class="radio-answer" tal:define="qstType view/getQuestionType" tal:condition="python: qstType == 1 or qstType == 2">
+        <div class="radio-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 0 or qstType == 1">
             <span tal:content="view/getLow">low level</span>
-            <input type="radio" id="radio0" name="radioLikert" value="0">
-            <label for="radio0">0</label>
-            <input type="radio" id="radio1" name="radioLikert" value="1">
-            <label for="radio1">1</label>
-            <input type="radio" id="radio2" name="radioLikert" value="2">
-            <label for="radio2">2</label>
-            <input type="radio" id="radio3" name="radioLikert" value="3">
-            <label for="radio3">3</label>
-            <input type="radio" id="radio4" name="radioLikert" value="4">
-            <label for="radio4">4</label>
+            <span tal:repeat="choice choices">
+                <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
+                <label for="radio0" tal:content="choice" tal:attributes="for choice;">0</label>
+            </span>
             <span tal:content="view/getHigh">high level</span>
-            <span tal:define="qstTpy view/getQuestionType" tal:condition="python: qstTpy == 2">
+            <span tal:define="qstTpy view/getQuestionType" tal:condition="python: qstTpy == 1">
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="radioNA" name="radioLikert" value="NA">
                 <label for="radioNA">NA</label>
             </span>
         </div>
-        <div id="radio-type3" class="radio-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 3">
+        <div id="radio-type3" class="radio-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 2">
             <span tal:repeat="choice choices">
                 <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
                 <label for="radio0" tal:content="choice" tal:attributes="for choice;">documentation</label>
             </span>
         </div>
-        <div class="text-answer" tal:define="qstType view/getQuestionType" tal:condition="python: qstType == 4">
+        <div class="text-answer" tal:define="qstType view/getQuestionType" tal:condition="python: qstType == 3">
             <textarea id="text-answer" class="answer" rows="2" cols="50" maxlength="100">Enter comment here...</textarea>
         </div>
         <div class="button-submit">
-            <button class="button_survey" name="nap.consent.bt.close" i18n:translate="title_button_close"><span>Submit</span></button>
+            <button class="button_survey" name="nap.consent.bt.submit" i18n:translate="title_button_submit"><span>Submit</span></button>
             <a href="url">withdraw from survey</a>
         </div>
     </div>
-     
-  <style type="text/css">
-    #viewlet-survey {
-      background: #000;
-      bottom: 0;
-      box-sizing: border-box;
-      color: #fff;
-      left: 0;
-      margin: 0 auto;
-      opacity: .92;
-      padding: 1em 2em 1em 1em;
-      position: fixed;
-      right: 0;
-      text-align: left;
-      vertical-align: baseline;
-      width: 100%;
-      z-index: 20180509;
-    }
+    
+  <script type="text/javascript" src="survey.js" tal:attributes="src string:${view/site_url}/++resource++nap.consent/survey.js"></script>
   
-    button.button_survey {
-      display: inline-block;
-      border-radius: 4px;
-      background-color: #f4511e;
-      border: 1px solid #e01a1a;
-      color: #FFFFFF;
-      text-align: center;
-      font-size: 20px;
-      padding: 10px;
-      width: 150px;
-      transition: all 0.5s;
-      cursor: pointer;
-      margin: 10px;
-    }
-    button.button_survey span {
-      cursor: pointer;
-      display: inline-block;
-      position: relative;
-      transition: 0.5s;
-    }
-    button.button_survey span:after {
-      content: '\00bb';
-      position: absolute;
-      opacity: 0;
-      top: 0;
-      right: -20px;
-      transition: 0.5s;
-    }
-    button.button_survey:hover span {
-      padding-right: 25px;
-    }
-    button.button_survey:hover span:after {
-      opacity: 1;
-      right: 0;
-    }
-    
-    #question-type{
-        text-align: center;
-        vertical-align:middle;
-    }
-    
-    .question{
-        display: inline-block; 
-        margin-right: 10px;
-        vertical-align:middle;
-        font-weight: bold;
-        text-align: left;
-        width: 25%;
-        
-    }
-    .button-submit{
-        display: inline-block;
-        margin-left: 20px;
-        
-    }
-    
-    #radio-type3{
-        column-count: 4;
-        width: 50%;
-    }
-    
-    .radio-answer,.text-answer {
-        display: inline-block;
-        text-align: center;
-        vertical-align:middle;
-    }
-    
-    .radio-answer input[type="radio"] {
-        display: none; 
-    }
-
-    .radio-answer label {
-        display:inline-block;
-        background-color:#d49b9b;
-        padding: 10px 20px;
-        font-family:Arial;
-        font-size:14px;
-        border: 1px solid #444;
-        border-radius: 4px;   
-    }
-
-    .radio-answer label:hover {
-        background-color: #c44837;
-    }
-
-    .radio-answer input[type="radio"]:checked + label { 
-        background-color:#c44837;
-        border-color: #842121;
-    }
-    
-  </style>
   <script>
   $(document).ready(function () {
     "use strict";
+    var d = new Date();
+    d.setMonth(d.getMonth() + 3);
+    var expMonth = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    
     var isAgree = $("#viewlet-survey").attr("isAgree");
     var enabled = $("#viewlet-consent").attr("data-enabled");
-    if(isAgree === "true" && enabled === "true"){
+    var isQstAvailable = $("#viewlet-survey").attr("isQstAvailable");
+    if(isAgree === "true" && enabled === "true" && isQstAvailable === "true" && getCookie("_q_answer") === "\"\""){
       $("#viewlet-survey").show();
     }
     else {
       return;
     }
     
-    $("button[name='nap.consent.bt.close']").click(function (event) {
-        //setting all cookies
-        $("#viewlet-survey").hide();
-    });
-  });
-  
-  $(window).bind("pageshow", function(event) {
-    var d = new Date();
-    d.setMonth(d.getMonth() + 3);
-    var expDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    
-    /** DETECT AND RECORD FORWARD AND BACKWARD NAVIGATION **/
-    var prev_reff = localStorage.getItem("cns-reff-url");
-    var _nav = getCookie("_nav");
-    if(_nav === "\"0\""){
-        _nav += "0";
-    } else if (prev_reff === document.URL){
-        _nav += "1";
-    } else {
-        _nav += "2";
-    }
-    localStorage.setItem("cns-reff-url", document.referrer);
-    document.cookie = "_nav=" + _nav+"; expires="+expDate+"; path=/";
-    document.cookie = "_time=" + (new Date()).getTime() +"; expires="+expDate+"; path=/";
-    /** END OF BLOCK **/
-    
-  });
-  
-  
-  function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
+    $("button[name='nap.consent.bt.submit']").click(function (event) {
+        //setting answer cookie
+        var radios = document.getElementsByName('radioLikert');
+        var text = document.getElementById('text-answer');
+        var answer = "";
+        if (radios){
+            for (var i = 0, length = radios.length; i < length; i++){
+                if (radios[i].checked){
+                    answer = radios[i].value;
+                    break;
+                }
             }
         }
-        return "";
-  }
+        if (text){
+            answer = text.value;
+        } 
+        if (answer !== ""){
+            document.cookie = "_q_answer="+answer+"; expires="+expMonth+"; path=/";
+            $("#viewlet-survey").hide();
+        }
+    });
+  });
   </script>
 </div>

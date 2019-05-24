@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="consent_javascripts">
+    <javascript id="++resource++nap.consent/consent.js"
+        enabled="True"
+        cookable="True"
+        inline="False"
+        compression="safe"
+        cacheable="True"/>
+    
+    <javascript id="++resource++nap.consent/survey.js"
+        enabled="True"
+        cookable="True"
+        inline="False"
+        compression="safe"
+        cacheable="True"/>
+</object>

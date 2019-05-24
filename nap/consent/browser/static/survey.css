@@ -1,0 +1,106 @@
+    #viewlet-survey {
+      background: #000;
+      bottom: 0;
+      box-sizing: border-box;
+      color: #fff;
+      left: 0;
+      margin: 0 auto;
+      opacity: .92;
+      padding: 1em 2em 1em 1em;
+      position: fixed;
+      right: 0;
+      text-align: left;
+      vertical-align: baseline;
+      width: 100%;
+      z-index: 20180509;
+    }
+  
+    button.button_survey {
+      display: inline-block;
+      border-radius: 4px;
+      background-color: #f4511e;
+      border: 1px solid #e01a1a;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 20px;
+      padding: 10px;
+      width: 150px;
+      transition: all 0.5s;
+      cursor: pointer;
+      margin: 10px;
+    }
+    button.button_survey span {
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: 0.5s;
+    }
+    button.button_survey span:after {
+      content: '\00bb';
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      right: -20px;
+      transition: 0.5s;
+    }
+    button.button_survey:hover span {
+      padding-right: 25px;
+    }
+    button.button_survey:hover span:after {
+      opacity: 1;
+      right: 0;
+    }
+    
+    #question-type{
+        text-align: center;
+        vertical-align:middle;
+    }
+    
+    .question{
+        display: inline-block; 
+        margin-right: 10px;
+        vertical-align:middle;
+        font-weight: bold;
+        text-align: left;
+        width: 25%;
+        
+    }
+    .button-submit{
+        display: inline-block;
+        margin-left: 20px;
+        
+    }
+    
+    #radio-type3{
+        column-count: 4;
+        width: 50%;
+    }
+    
+    .radio-answer,.text-answer {
+        display: inline-block;
+        text-align: center;
+        vertical-align:middle;
+    }
+    
+    .radio-answer input[type="radio"] {
+        display: none; 
+    }
+
+    .radio-answer label {
+        display:inline-block;
+        background-color:#d49b9b;
+        padding: 10px 20px;
+        font-family:Arial;
+        font-size:14px;
+        border: 1px solid #444;
+        border-radius: 4px;   
+    }
+
+    .radio-answer label:hover {
+        background-color: #c44837;
+    }
+
+    .radio-answer input[type="radio"]:checked + label { 
+        background-color:#c44837;
+        border-color: #842121;
+    }

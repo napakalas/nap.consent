@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<object name="portal_css">
+
+ <stylesheet title="css_consent"
+    id="++resource++nap.consent/consent.css"
+    media="screen" rel="stylesheet" rendering="import"
+    cacheable="True" compression="safe" cookable="True"
+    enabled="1" expression="" remove="true"/>
+
+  <stylesheet title="css_survey"
+    id="++resource++nap.consent/survey.css"
+    media="screen" rel="stylesheet" rendering="import"
+    cacheable="True" compression="safe" cookable="True"
+    enabled="1" expression="" remove="true"/>
+
+</object>
+

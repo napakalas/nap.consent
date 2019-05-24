@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<object name="portal_actions" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <object name="site_actions" meta_type="CMF Action Category">
+  <object name="survey_result" meta_type="CMF Action" i18n:domain="nap.consent">
+   <property name="title" i18n:translate="">View Feedback</property>
+   <property name="description" i18n:translate="View site feedback"></property>
+   <property
+      name="url_expr">string:${globals_view/navigationRootUrl}/@@survey_result_form</property>
+   <property name="link_target"></property>
+   <property name="icon_expr"></property>
+   <property name="available_expr"></property>
+   <property name="permissions">
+     Manage portal
+   </property>
+   <property name="visible">True</property>
+  </object>
+ </object>
+</object>
