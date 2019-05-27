@@ -65,8 +65,10 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         return len(self._questions)
         
     def getQuestion(self, context, view, actUrl, userId, sessionId, activity):
-        pType = self.getPageType(context, view, actUrl)
+        if not self.getUserRecord(userId).isActivated():
+            return None
         
+        pType = self.getPageType(context, view, actUrl)
         #check ALLPAGES questions
         if self.getTotFeedback(userId) >= Survey.checkNumAnswer:
             if self.getTotFeedback(userId,sessionId=sessionId) >= Survey.checkNumAnswerSes:
@@ -146,18 +148,23 @@ class Survey(Implicit, Persistent, RoleManager, Item):
             return PType.general
         
     def getUserRecord(self, userId):
+        annotations = IAnnotations(api.portal.get())
+        if Survey.KEY not in annotations:
+            annotations[Survey.KEY] = OOBTree()
+        if not annotations[Survey.KEY].has_key(userId):
+            annotations[Survey.KEY][userId] = User(userId)
+        return annotations[Survey.KEY][userId]
+    
+    def isUserExist(self, userId):
         portal = api.portal.get()
         annotations = IAnnotations(api.portal.get())
         if Survey.KEY not in annotations:
             annotations[Survey.KEY] = OOBTree()
-        #FOR DEVELOPMENT PURPOSE, DELETE AFTER FIXED#
-        #if annotations[Survey.KEY].has_key(userId):
-        #    f = annotations[Survey.KEY].pop(userId)
-        #    del f
-        #END PURPOSE
-        if not annotations[Survey.KEY].has_key(userId):
-            annotations[Survey.KEY][userId] = User(userId)
-        return annotations[Survey.KEY][userId]
+            return False
+        if annotations[Survey.KEY].has_key(userId):
+            return True
+        return False
+            
     
     def getTotFeedback(self,userId,**kwargs):
         userRecord = self.getUserRecord(userId)
@@ -189,5 +196,35 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         return summary
     
     def cleanUp(self):
-        annotations = IAnnotations(api.portal.get())
-        del annotations[Survey.KEY]
+        condition = 'False'
+        users = IAnnotations(api.portal.get())[Survey.KEY]
+        for userId in users.keys():
+            try:
+                user = users.pop(userId)
+                del user
+                condition = "True"
+            except:
+                condition = "True"
+        return condition
+        
+    def disActivateUser(self, userId):
+        if self.isUserExist(userId):
+            IAnnotations(api.portal.get())[Survey.KEY][userId].setDisActivate()
+        
+    def activateUser(self, userId):
+        if self.isUserExist(userId):
+            IAnnotations(api.portal.get())[Survey.KEY][userId].setActivate()
+            
+    def isActivated(self, userId):
+        if self.isUserExist(userId):
+            return IAnnotations(api.portal.get())[Survey.KEY][userId].isActivated()
+        return False
+            
+    def getAnswerList(self):
+        users = IAnnotations(api.portal.get())[Survey.KEY]
+        answerList = []
+        for user in users.values():
+            answers = user.getAnswerList()
+            for answer in answers:
+                answerList.append(answer)
+        return answerList

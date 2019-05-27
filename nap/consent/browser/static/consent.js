@@ -56,7 +56,7 @@
         event.preventDefault();
         localStorage.setItem("cns-status", "deactivated");
         localStorage.setItem("cns-status-date", new Date());
-        document.cookie = "_user=";
+        document.cookie = "_user=; path=/";
         $("#viewlet-consent").hide();
       });
       
@@ -77,7 +77,7 @@
       var prevUser = getCookie("_user");
       if (status === "activated" && user.length > 0 && prevUser !== user){
         document.cookie = "_user="+user+"; expires="+expireYear+"; path=/";
-      } 
+      }
     });
   }
   

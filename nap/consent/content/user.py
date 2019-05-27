@@ -17,6 +17,7 @@ class User(Implicit, Persistent, RoleManager, Item):
         self._sessions = OOBTree()
         self._totFeedback = 0
         self._answered = set()
+        self._isActive = True
         
     def addAnswer(self, sessionId, questionId, answer, nav, time, context, loginStatus, page, query):
         if self._sessions.has_key(sessionId):
@@ -58,3 +59,22 @@ class User(Implicit, Persistent, RoleManager, Item):
     
     def getAnswers(self):
         return self._answered
+    
+    def getAnswerList(self):
+        answerList = []
+        answerList.append([self._userId,self._isActive])
+        for session in self._sessions.values():
+            answers = session.getAnswerList()
+            for answer in answers:
+                tmp = [self._userId] + answer
+                answerList.append(tmp)
+        return answerList
+    
+    def setDisActivate(self):
+        self._isActive = False
+        
+    def setActivate(self):
+        self._isActive = True
+    
+    def isActivated(self):
+        return self._isActive

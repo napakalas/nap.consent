@@ -50,4 +50,10 @@ class Session(Implicit, Persistent, RoleManager, Item):
                 return True
         return False
     
+    def getAnswerList(self):
+        answers = []
+        for time in self._questionId.keys():
+            tmp = [self._sessionId, time, self._questionId.get(time), self._answer.get(time), self._nav.get(time), self._context.get(time), self._loginStatus.get(time), self._page.get(time), self._query.get(time)]
+            answers.append(tmp)
+        return answers
     

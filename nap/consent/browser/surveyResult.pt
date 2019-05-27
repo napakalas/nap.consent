@@ -25,17 +25,30 @@
                 </div>
                 <br>
                 <br>
-                <br>
+                <input type="checkbox" id="clean-checkbox" onclick="cleanFunction()">Erase feedback from database<br>
                 <br>
                 <form action="@@survey_result_form" method="POST">
-                    <button type="submit" name="clearAll">
-                        Be ware, it will clean up all data
-                    </button>
+                    <div id="clean-button" style="display: none" >
+                        <button type="submit" name="clearall">
+                            Be ware, it will clean up all data
+                        </button>
+                    </div>
                 </form>
+                <div tal:define="isCleanUp view/cleanUp" tal:condition="python: isCleanUp == 'True'">Data clear</div>
+                <script>
+                    function cleanFunction() {
+                        var checkBox = document.getElementById("clean-checkbox");
+                        var div = document.getElementById("clean-button");
+                        if (checkBox.checked == true){
+                            $("#clean-button").show();
+                        } else {
+                            $("#clean-button").hide();
+                        }
+                    }
+                </script>
                 
-                
-
         </tal:main-macro>
     </div>
+    
 </body>
 </html>

@@ -17,8 +17,8 @@
         <div>View :<span tal:content="view/getView"></span></div>
         <div>Manager :<span tal:content="view/getManager"></span></div>
         <div>Portal :<span tal:content="view/getPortal"></span></div>
-        <div>Absolute URL :<span tal:content="view/getAbsoluteUrl"></span></div-->
-        <div>Answers :<span tal:content="view/getAnswers"></span></div>
+        <div>Absolute URL :<span tal:content="view/getAbsoluteUrl"></span></div>
+        <div>Answers :<span tal:content="view/getAnswers"></span></div-->
     </div>
     
     <div id="question-type" tal:define="isQstAvailable view/isQstAvailable" tal:condition="python: isQstAvailable == 'true'">
@@ -49,7 +49,15 @@
         </div>
         <div class="button-submit">
             <button class="button_survey" name="nap.consent.bt.submit" i18n:translate="title_button_submit"><span>Submit</span></button>
-            <a href="url">withdraw from survey</a>
+            <a href="#" onclick="showWithdraw()">withdraw from survey</a>
+        </div>
+    </div>
+    
+    <div id="withdraw-div" style="display: none">
+        <div class="bts_consent">
+            Are you sure want to withdraw?
+            <button class="button_consent" name="nap.consent.bt.abort" i18n:translate="title_button_abort"><span>Abort</span></button>
+            <button class="button_consent" name="nap.consent.bt.proceed" i18n:translate="title_button_proceed"><span>Proceed</span></button>
         </div>
     </div>
     
@@ -93,6 +101,27 @@
             $("#viewlet-survey").hide();
         }
     });
+    
+    $("button[name='nap.consent.bt.abort']").click(function (event) {
+        $("#withdraw-div").hide();
+        $("#question-type").show();
+    });
+    
+    //withdraw from survey
+    $("button[name='nap.consent.bt.proceed']").click(function (event) {
+        $("#withdraw-div").hide();
+        event.preventDefault();
+        localStorage.setItem("cns-status", "deactivated");
+        localStorage.setItem("cns-status-date", new Date());
+        document.cookie = "_user=; path=/";
+    });
   });
+  
+  function showWithdraw(){
+    //alert("show withdraw");
+    $("#question-type").hide();
+    $("#withdraw-div").show();
+  }
+  
   </script>
 </div>

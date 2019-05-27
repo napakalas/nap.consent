@@ -7,10 +7,9 @@ from StringIO  import StringIO
 
 class SurveyResultView(BrowserView):
 
-    def update(self):
-        if "clearAll" in self.request.form:
-            survey = Tools.survey
-            survey.cleanUp()
+    def cleanUp(self):
+        if "clearall" in self.request.form:
+            Tools.survey.cleanUp()
                 
     def getSummary(self):
         survey = Tools.survey
@@ -23,11 +22,14 @@ class SurveyCsv(BrowserView):
     def __call__(self):
         out = StringIO()
         writer = csv.writer(out)
-    
-        writer.writerow(['Spam'] * 5 + ['Baked Beans'])
-        writer.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
+        
+        answerList = Tools.survey.getAnswerList()
+        writer.writerow(['user', 'session', 'timestamp', 'question', 'answer', 'nav', 'context', 'login', 'url', 'search text'])
+        for answer in answerList:
+            writer.writerow(answer)   
         
         filename = "feedback.csv"
         self.request.response.setHeader('Content-Type', 'text/csv')
         self.request.response.setHeader('Content-Disposition', 'attachment; filename="%s"' % filename)
         return out.getvalue()
+    

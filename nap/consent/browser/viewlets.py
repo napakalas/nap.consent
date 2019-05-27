@@ -42,7 +42,7 @@ class SurveyViewlet(ViewletBase):
     def update(self):
         super(SurveyViewlet, self).update()
         # GET INFORMATION FROM COOKIE
-        r_userId = self.request.cookies.get("_user", "")
+        r_userId = self.request.cookies.get("_user", -1)
         r_sessionId = self.request.cookies.get("_session", "")
         r_questionId = int(self.request.cookies.get("_q_id", -1))
         r_answer = self.request.cookies.get("_q_answer", "")
@@ -54,22 +54,30 @@ class SurveyViewlet(ViewletBase):
         r_query = self.request.cookies.get("_query", "")
         
         #SAVING FEEDBACK
-        self.survey = Tools.initSurvey()
-        if r_userId is 'undefined':
-            r_userId = session
+        survey = Tools.initSurvey()
+        if r_userId == 'undefined':
+            r_userId = r_sessionId
         if r_userId != -1:
             if r_questionId >= 0 and len(r_answer) > 0:
-                self.survey.addAnswer(r_userId, r_sessionId, r_questionId, r_answer, r_nav, r_time, self.context, r_loginStatus, r_page, r_query)
+                survey.addAnswer(r_userId, r_sessionId, r_questionId, r_answer, r_nav, r_time, str(self.context), r_loginStatus, r_page, r_query)
+                
+        #WITHDRAW FROM SURVEY
+        userId = str(api.user.get_current())
+        if r_userId == -1 and not api.user.is_anonymous():
+            survey.disActivateUser(str(api.user.get_current()))
+        elif r_userId != -1 and not api.user.is_anonymous() and not survey.isActivated(userId):
+            survey.activateUser(str(api.user.get_current()))
         
         # INITIALISING VIEWLET
         if api.user.is_anonymous():
-            if r_userId is 'undefined':
-                user = self.getSessionId()
+            if r_userId == 'undefined':
+                userId = self.getSessionId()
             else:
-                user = r_userId
+                userId = r_userId
+        if r_userId != -1:
+            self.question = survey.getQuestion(self.context, self.view, self.request["ACTUAL_URL"], userId, self.getSessionId(), r_activity)
         else:
-            user = str(api.user.get_current())
-        self.question = self.survey.getQuestion(self.context, self.view, self.request["ACTUAL_URL"], user, self.getSessionId(), r_activity)
+            self.question = None
         self.settings = getUtility(IRegistry).forInterface(IConsentControlPanel)
         
         
@@ -79,7 +87,7 @@ class SurveyViewlet(ViewletBase):
         expires = formatdate(expiration_seconds, usegmt=True)
         
         # set user activity, browsing or searching
-        pageType = self.survey.getPageType(self.context, self.view, self.request["ACTUAL_URL"]) 
+        pageType = survey.getPageType(self.context, self.view, self.request["ACTUAL_URL"]) 
         if pageType is pt.search:
             self.request.response.setCookie("_activity", act.search, expires=expires, path='/') 
         elif pageType is pt.browse:
@@ -185,4 +193,4 @@ class SurveyViewlet(ViewletBase):
         return self.context.absolute_url() + ' ' + self.request["ACTUAL_URL"] + ' ' + self.request["URL"] + ' ' + self.request["QUERY_STRING"]
     
     def getAnswers(self):
-        return self.survey.getAnswers(self.request.cookies.get("_user", ""))
+        return Tools.initSurvey().getAnswers(self.request.cookies.get("_user", ""))
