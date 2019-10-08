@@ -1,5 +1,5 @@
 <div id="viewlet-consent" role="alert" style="display: none" tal:attributes="data-enabled view/enabled">
-    
+
   <link href="consent.css" rel="stylesheet" tal:attributes="href string:${view/site_url}/++resource++nap.consent/consent.css">
   <div id="attrs" tal:attributes="src string:${view/site_url}/++resource++nap.consent/ABI-logo.png;
                                   user view/user"></div>
@@ -10,19 +10,20 @@
       <div class="consent-text" tal:content="structure view/text">Consent</div>
     </div>
     <div class="bts_consent">
-      <button name="nap.consent.bt.info" i18n:translate="title_button_info"><span>More Info</span></button>
+      <button class="button_consent" name="nap.consent.bt.info" i18n:translate="title_button_info"><span>More Info</span></button>
     </div>
   </div>
-  
+
   <div id="pis-icf-consent">
     <div class="consent-outer">
-      <div id="pis-consent" class="left-inner" tal:attributes="url string:${view/site_url}/++resource++nap.consent/PIS.html">This is the PIS</div>
+      <div id="pis-consent" class="inner left-inner" tal:attributes="url string:${view/site_url}/++resource++nap.consent/PIS.html">This is the PIS</div>
       <div class="separator"></div>
-      <div id="icf-consent" class="right-inner" tal:attributes="url string:${view/site_url}/++resource++nap.consent/ICF.html">This is the ICF</div>
+      <div id="icf-consent" class="inner right-inner" tal:attributes="url string:${view/site_url}/++resource++nap.consent/ICF.html">This is the ICF</div>
       <div "style: clear:both;"></div>
     </div>
     <div class="bts_consent">
       <button class="button_consent" name="nap.consent.bt.disagree" i18n:translate="title_button_agree"><span>Disagree</span></button>
+      <span>&nbsp;&nbsp;</span>
       <button class="button_consent" name="nap.consent.bt.agree" i18n:translate="title_button_agree"><span>Agree</span></button>
     </div>
   </div>

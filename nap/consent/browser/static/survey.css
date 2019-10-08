@@ -3,20 +3,20 @@
       bottom: 0;
       box-sizing: border-box;
       color: #fff;
-      left: 0;
       margin: 0 auto;
       opacity: .92;
       padding: 1em 2em 1em 1em;
       position: fixed;
-      right: 0;
+      bottom: 5px;
+      right: 5px;
       text-align: left;
       vertical-align: baseline;
-      width: 100%;
       z-index: 20180509;
+      width: 600px;
+      left:calc(100% - 600px);
     }
-  
+
     button.button_survey {
-      display: inline-block;
       border-radius: 4px;
       background-color: #f4511e;
       border: 1px solid #e01a1a;
@@ -29,12 +29,13 @@
       cursor: pointer;
       margin: 10px;
     }
+
     button.button_survey span {
       cursor: pointer;
-      display: inline-block;
       position: relative;
       transition: 0.5s;
     }
+
     button.button_survey span:after {
       content: '\00bb';
       position: absolute;
@@ -43,64 +44,100 @@
       right: -20px;
       transition: 0.5s;
     }
+
     button.button_survey:hover span {
       padding-right: 25px;
     }
+
     button.button_survey:hover span:after {
       opacity: 1;
       right: 0;
     }
-    
-    #question-type{
-        text-align: center;
-        vertical-align:middle;
-    }
-    
-    .question{
-        display: inline-block; 
-        margin-right: 10px;
-        vertical-align:middle;
-        font-weight: bold;
-        text-align: left;
-        width: 25%;
-        
-    }
-    .button-submit{
-        display: inline-block;
-        margin-left: 20px;
-        
-    }
-    
-    #radio-type3{
-        column-count: 4;
-        width: 50%;
-    }
-    
-    .radio-answer,.text-answer {
-        display: inline-block;
-        text-align: center;
-        vertical-align:middle;
-    }
-    
-    .radio-answer input[type="radio"] {
-        display: none; 
+
+    .button-submit {
+      /* margin-left: 20px; */
+      float: right;
     }
 
-    .radio-answer label {
-        display:inline-block;
-        background-color:#d49b9b;
-        padding: 10px 20px;
-        font-family:Arial;
-        font-size:14px;
-        border: 1px solid #444;
-        border-radius: 4px;   
+    #question-type {
+      vertical-align: middle;
     }
 
-    .radio-answer label:hover {
-        background-color: #c44837;
+    .question {
+      vertical-align: middle;
+      font-weight: bold;
+      text-align: left;
+      width: 100%;
+      text-align: center;
+      padding: 10px 10px;
     }
 
-    .radio-answer input[type="radio"]:checked + label { 
-        background-color:#c44837;
-        border-color: #842121;
+    .text-answer{
+      text-align: center;
+      vertical-align: middle;
+      border-radius: 3px;
+    }
+    .likert-answer{
+      margin: 0 auto;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .likert-answer input[type="radio"]{
+      display: none;
+    }
+
+    .likert-answer label {
+      display: inline-block;
+      background-color: #d49b9b;
+      padding: 10px 15px;
+      font-family: Arial;
+      font-size: 14px;
+      border: 1px solid #444;
+      border-radius: 4px;
+    }
+
+    .likert-answer label:hover{
+      background-color: #c44837;
+    }
+
+    .likert-answer input[type="radio"]:checked+label{
+      background-color: #c44837;
+      border-color: #842121;
+    }
+
+    .multi-answer{
+      display:block;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .multi-answer input[type="radio"]:checked+label {
+      background-color: #c44837;
+      border-color: #842121;
+    }
+
+    .multi-answer label:hover {
+      background-color: #c44837;
+    }
+
+    .multi-answer input[type="radio"] {
+      display: none;
+    }
+    .multi-answer label {
+      display: inline-block;
+      background-color: #d49b9b;
+      padding: 10px ;
+      font-family: Arial;
+      font-size: 14px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      width: 250px;
+      height: 17px;
+
+    }
+
+    .multi-answer textarea {
+      width: 100px;
+      border-radius: 3px;
     }

@@ -16,19 +16,31 @@ from time import time
 from plone.supermodel import model
 
 DEFAULT_CONSENT = (
-    u'<p>We are now working on the Smart searching for the Physiome Project. '
-    u'This project aim is to easy research communities when looking for relevant knowledge on this website. '
-    u'Therefore, we need your help by allowing cookies '
-    u'and answering short questions. '    
-    u'We use cookies for statistical purposes, '
-    u'to make select questions, '
-    u'to analyse your effort, '
-    u'or to remember your settings. '
-    u'Click the button for more info.</p>')
+    u'<p>We are conducting a study called "Smart searching for the Physiome Project" '
+    u'aiming to add to the Physiome Model Repository (PMR) a "Google search" style '
+    u'interface for information, models, and knowledge retrieval. The interface '
+    u'will be simple yet powerful, so it will be useful and can be easily used by '
+    u'advanced and less experienced users alike.</p>'
+    u'<p>Therefore, we need your participation by answering questions along with '
+    u'your activity in the PMR which are intended to gather data regarding the PMR on your:</p>'
+    u'<ul>'
+    u'<li>familiarity and use,</li>'
+    u'<li>needs and requirements,</li>'
+    u'<li>relevance of discovered models and satisfaction.</li>'
+    u'</ul>'
+    u'<p>The collected data will be utilised to develop novel algorithms and technologies for:</p>'
+    u'<ul>'
+    u'<li>query processing and interpretation;</li>'
+    u'<li>models indexing, ranking, and presentation;</li>'
+    u'<li>and search engine evaluation.</li>'
+    u'</ul>'
+    u'<p>We use cookies for this purpose to remember your settings and to store '
+    u'your answers temporarily. We will not record an personally identifiable '
+    u'information nor provide the collected data for any commercial use.</p>')
 
 class IBrowserLayer(Interface):
     """A layer specific for this add-on product."""
-    
+
 @provider(IContextAwareDefaultFactory)
 def default_title(context):
     # we need to pass the request as translation context
@@ -45,7 +57,7 @@ def default_text(context):
         context=getRequest())
 
 class IConsentControlPanel(model.Schema):
-    
+
     enabled = schema.Bool(
         title=_(u'title_enabled', default=u'Allow consent?'),
         description=_(
@@ -54,14 +66,14 @@ class IConsentControlPanel(model.Schema):
         default=False,
         required=False,
     )
-    
+
     title = schema.TextLine(
         title=_(u'title_title', default=u'Title'),
         description=_(u'help_title', default=u'A title for the consent.'),
         required=False,
         defaultFactory=default_title,
     )
-    
+
     # XXX: we must use Text instead of RichText as we can only store
     #      primitive Python data types in plone.app.registry
     #      see: https://community.plone.org/t/1240
@@ -77,7 +89,7 @@ class IConsentControlPanel(model.Schema):
         required=True,
         defaultFactory=default_text,
     )
-    
+
     deleteData = schema.Bool(
         title=_(u'title_enabled', default=u'Finish the survey? Do not need the data anymore'),
         description=_(
@@ -96,4 +108,3 @@ class ConsentControlPanelForm(RegistryEditForm):
 class ConsentControlPanelView(ControlPanelFormWrapper):
     """Control panel form wrapper."""
     form = ConsentControlPanelForm
-    

@@ -1,127 +1,68 @@
-<div id="viewlet-survey" role="alert" style="display: none" 
-  tal:attributes="
+<div id="viewlet-survey" role="alert" style="display: none" tal:attributes="
     data-enabled view/enabled;
-    isAgree view/isAgree; 
-    prevUser view/prevUser;
-    getSessionId view/getSessionId;
-    getCookieId view/getCookieId;
+    isAgree view/isAgree;
     isQstAvailable view/isQstAvailable;
   ">
-    <link href="survey.css" rel="stylesheet" tal:attributes="href string:${view/site_url}/++resource++nap.consent/survey.css">
-    <div id="div_info">
-        <!--div>Prev User :<span tal:content="view/prevUser"></span></div>
-        <div>Session ID :<span tal:content="view/getSessionId"></span></div>
-        <div>Session Data :<span tal:content="view/getSession"></span></div>
-        <div>Cookie Data :<span tal:content="view/getCookieId"></span></div>
-        <div>Context :<span tal:content="view/getContext"></span></div>
-        <div>View :<span tal:content="view/getView"></span></div>
-        <div>Manager :<span tal:content="view/getManager"></span></div>
-        <div>Portal :<span tal:content="view/getPortal"></span></div>
-        <div>Absolute URL :<span tal:content="view/getAbsoluteUrl"></span></div>
-        <div>Answers :<span tal:content="view/getAnswers"></span></div-->
+  <link href="survey.css" rel="stylesheet" tal:attributes="href string:${view/site_url}/++resource++nap.consent/survey.css">
+  <div id="question-type" tal:define="isQstAvailable view/isQstAvailable" tal:condition="python: isQstAvailable == 'true'">
+    <div class="question" tal:content="view/getQuestionText">
+      How familiar are you with this website?
     </div>
-    
-    <div id="question-type" tal:define="isQstAvailable view/isQstAvailable" tal:condition="python: isQstAvailable == 'true'">
-        <div class="question" tal:content="view/getQuestionText">
-            How familiar are you with this website?
-        </div>
-        <div class="radio-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 0 or qstType == 1">
-            <span tal:content="view/getLow">low level</span>
-            <span tal:repeat="choice choices">
-                <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
-                <label for="radio0" tal:content="choice" tal:attributes="for choice;">0</label>
-            </span>
-            <span tal:content="view/getHigh">high level</span>
-            <span tal:define="qstTpy view/getQuestionType" tal:condition="python: qstTpy == 1">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="radioNA" name="radioLikert" value="NA">
-                <label for="radioNA">NA</label>
-            </span>
-        </div>
-        <div id="radio-type3" class="radio-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 2">
-            <span tal:repeat="choice choices">
-                <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
-                <label for="radio0" tal:content="choice" tal:attributes="for choice;">documentation</label>
-            </span>
-        </div>
-        <div class="text-answer" tal:define="qstType view/getQuestionType" tal:condition="python: qstType == 3">
-            <textarea id="text-answer" class="answer" rows="2" cols="50" maxlength="100">Enter comment here...</textarea>
-        </div>
-        <div class="button-submit">
-            <button class="button_survey" name="nap.consent.bt.submit" i18n:translate="title_button_submit"><span>Submit</span></button>
-            <a href="#" onclick="showWithdraw()">withdraw from survey</a>
+
+    <div class="likert-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 0 or qstType == 1">
+      <span tal:content="view/getLow">low level</span>
+      <span tal:repeat="choice choices">
+        <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
+        <label for="radio0" tal:content="choice" tal:attributes="for choice;">0</label>
+      </span>
+      <span tal:content="view/getHigh">high level</span>
+      <span tal:define="qstTpy view/getQuestionType" tal:condition="python: qstTpy == 1">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="radioNA" name="radioLikert" value="NA">
+          <label for="radioNA">N/A</label>
+      </span>
+    </div>
+
+    <div class="text-answer" tal:define="qstType view/getQuestionType" tal:condition="python: qstType == 3">
+      <textarea id="text-answer" rows="2" cols="50" maxlength="100"></textarea>
+    </div>
+
+    <div id="radio-multi" class="multi-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 2">
+        <div tal:repeat="choice choices">
+            <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
+            <label for="radio0" tal:content="choice" tal:attributes="for choice;">documentation</label>
         </div>
     </div>
-    
-    <div id="withdraw-div" style="display: none">
-        <div class="bts_consent">
-            Are you sure want to withdraw?
-            <button class="button_consent" name="nap.consent.bt.abort" i18n:translate="title_button_abort"><span>Abort</span></button>
-            <button class="button_consent" name="nap.consent.bt.proceed" i18n:translate="title_button_proceed"><span>Proceed</span></button>
-        </div>
+
+    <div id="radio-multi-text" class="multi-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 4">
+      <div tal:repeat="choice choices">
+        <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
+        <label for="radio0" tal:content="choice" tal:attributes="for choice;">documentation</label>
+      </div>
+      <div>
+        <textarea disabled id="text-answer" maxlength="70"></textarea>
+      </div>
     </div>
-    
+
+    <div class="button-submit">
+      <button class="button_survey" name="nap.consent.bt.submit" i18n:translate="title_button_submit">
+        <span>Submit</span>
+      </button>
+      <a href="#" onclick="showWithdraw()">withdraw from survey</a>
+    </div>
+  </div>
+
+  <div id="withdraw-div" style="display: none">
+    <div class="bts_consent">
+      Are you sure want to withdraw?
+      <button class="button_survey" name="nap.consent.bt.abort" i18n:translate="title_button_abort">
+        <span>Abort</span>
+      </button>
+      <button class="button_survey" name="nap.consent.bt.proceed" i18n:translate="title_button_proceed">
+        <span>Proceed</span>
+      </button>
+    </div>
+  </div>
+
   <script type="text/javascript" src="survey.js" tal:attributes="src string:${view/site_url}/++resource++nap.consent/survey.js"></script>
-  
-  <script>
-  $(document).ready(function () {
-    "use strict";
-    var d = new Date();
-    d.setMonth(d.getMonth() + 3);
-    var expMonth = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    
-    var isAgree = $("#viewlet-survey").attr("isAgree");
-    var enabled = $("#viewlet-consent").attr("data-enabled");
-    var isQstAvailable = $("#viewlet-survey").attr("isQstAvailable");
-    if(isAgree === "true" && enabled === "true" && isQstAvailable === "true" && getCookie("_q_answer") === "\"\""){
-      $("#viewlet-survey").show();
-    }
-    else {
-      return;
-    }
-    
-    $("button[name='nap.consent.bt.submit']").click(function (event) {
-        //setting answer cookie
-        var radios = document.getElementsByName('radioLikert');
-        var text = document.getElementById('text-answer');
-        var answer = "";
-        if (radios){
-            for (var i = 0, length = radios.length; i < length; i++){
-                if (radios[i].checked){
-                    answer = radios[i].value;
-                    break;
-                }
-            }
-        }
-        if (text){
-            answer = text.value;
-        } 
-        if (answer !== ""){
-            document.cookie = "_q_answer="+answer+"; expires="+expMonth+"; path=/";
-            $("#viewlet-survey").hide();
-        }
-    });
-    
-    $("button[name='nap.consent.bt.abort']").click(function (event) {
-        $("#withdraw-div").hide();
-        $("#question-type").show();
-    });
-    
-    //withdraw from survey
-    $("button[name='nap.consent.bt.proceed']").click(function (event) {
-        $("#withdraw-div").hide();
-        event.preventDefault();
-        localStorage.setItem("cns-status", "deactivated");
-        localStorage.setItem("cns-status-date", new Date());
-        document.cookie = "_user=; path=/";
-    });
-  });
-  
-  function showWithdraw(){
-    //alert("show withdraw");
-    $("#question-type").hide();
-    $("#withdraw-div").show();
-  }
-  
-  </script>
 </div>

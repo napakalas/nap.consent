@@ -13,7 +13,7 @@ from plone import api
 from .user import User
 from BTrees.OOBTree import OOBTree
 
-class PType:
+class PType:        #
     browse = 0
     search = 1
     general = 2
@@ -27,26 +27,26 @@ class Appear:
     onePerSessionPage = 2
 
 class Survey(Implicit, Persistent, RoleManager, Item):
-    
+
     security = ClassSecurityInfo()
-    checkNumAnswer = 5
-    checkNumAnswerSes = 2
+    checkNumAnswer = 10
+    checkNumAnswerSes = 5
     KEY = 'nap.consent.feedback'
-    
+
     def __init__(self):
         self._questions = []
         self._questionPType = {}
         self._questionAppear = {}
-    
+
     # multi: *args = choices
     # likert_1, likert_2: *args = q_Low, q_High
     def addQuestion(self, q_Type, q_Question, activity, *args):
         q_Id = len(self._questions)
         question = Question(q_Id, q_Type, q_Question, activity, *args);
         self._questions.append(question)
-        
+
     def setLastQuestionPages(self, appear, *args):
-        lastID = len(self._questions)-1
+        lastID = self._questions[-1].getId()
         for arg in args:
             if arg in self._questionPType:
                 lstPage = self._questionPType[arg]
@@ -60,14 +60,17 @@ class Survey(Implicit, Persistent, RoleManager, Item):
             lstAppear = []
         lstAppear.append(lastID)
         self._questionAppear[appear] = lstAppear
-            
+
+    def getLastQuestionId(self):
+        return self._questions[-1].getId()
+
     def getQuestionTot(self):
         return len(self._questions)
-        
+
     def getQuestion(self, context, view, actUrl, userId, sessionId, activity):
         if not self.getUserRecord(userId).isActivated():
             return None
-        
+
         pType = self.getPageType(context, view, actUrl)
         #check ALLPAGES questions
         if self.getTotFeedback(userId) >= Survey.checkNumAnswer:
@@ -104,7 +107,7 @@ class Survey(Implicit, Persistent, RoleManager, Item):
                             available.append(questionId)
                         elif self.isAnswered(parentId, userId, sessionId=sessionId):
                             available.append(questionId)
-                        
+
             if len(available) > 0:
                 return self._questions[random.choice(available)]
         #check DOCUMENT or FILE page type
@@ -121,7 +124,7 @@ class Survey(Implicit, Persistent, RoleManager, Item):
                             available.append(questionId)
             if len(available) > 0:
                 return self._questions[random.choice(available)]
-            
+
         return None
 
     #get page type, selected question will be based on the type of the page#
@@ -146,7 +149,7 @@ class Survey(Implicit, Persistent, RoleManager, Item):
             return PType.browse
         else:
             return PType.general
-        
+
     def getUserRecord(self, userId):
         annotations = IAnnotations(api.portal.get())
         if Survey.KEY not in annotations:
@@ -154,7 +157,7 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         if not annotations[Survey.KEY].has_key(userId):
             annotations[Survey.KEY][userId] = User(userId)
         return annotations[Survey.KEY][userId]
-    
+
     def isUserExist(self, userId):
         portal = api.portal.get()
         annotations = IAnnotations(api.portal.get())
@@ -164,24 +167,21 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         if annotations[Survey.KEY].has_key(userId):
             return True
         return False
-            
-    
+
+
     def getTotFeedback(self,userId,**kwargs):
         userRecord = self.getUserRecord(userId)
         return userRecord.getTotFeedback(**kwargs)
-    
+
     #isAnswered(questionId, userId, sessionId=sessionId, context=context)
     def isAnswered(self, questionId, userId,  **kwargs):
         userRecord = self.getUserRecord(userId)
         return userRecord.isAnswered(questionId, **kwargs)
-    
+
     def addAnswer(self, userId, sessionId, questionId, answer, nav, time, context, loginStatus, page, query):
         userRecord = self.getUserRecord(userId)
         return userRecord.addAnswer(sessionId, questionId, answer, nav, time, context, loginStatus, page, query)
-    
-    def getAnswers(self, userId):
-        return self.getUserRecord(userId).getAnswers()
-        
+
     def getSummary(self):
         users = IAnnotations(api.portal.get())[Survey.KEY]
         summary = []
@@ -194,7 +194,7 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         summary.append("# of sessions " + str(totSession))
         summary.append("# of feedback " + str(totFeedBack))
         return summary
-    
+
     def cleanUp(self):
         condition = 'False'
         users = IAnnotations(api.portal.get())[Survey.KEY]
@@ -206,20 +206,20 @@ class Survey(Implicit, Persistent, RoleManager, Item):
             except:
                 condition = "True"
         return condition
-        
+
     def disActivateUser(self, userId):
         if self.isUserExist(userId):
             IAnnotations(api.portal.get())[Survey.KEY][userId].setDisActivate()
-        
+
     def activateUser(self, userId):
         if self.isUserExist(userId):
             IAnnotations(api.portal.get())[Survey.KEY][userId].setActivate()
-            
+
     def isActivated(self, userId):
         if self.isUserExist(userId):
             return IAnnotations(api.portal.get())[Survey.KEY][userId].isActivated()
         return False
-            
+
     def getAnswerList(self):
         users = IAnnotations(api.portal.get())[Survey.KEY]
         answerList = []

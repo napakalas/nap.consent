@@ -8,7 +8,7 @@ from .content.survey import Appear as ap
 
 class Tools:
     survey = Survey()
-    
+
     @staticmethod
     def initSurvey():
         if Tools.survey is None:
@@ -18,52 +18,66 @@ class Tools:
         #QType: likert_1, likert_2, multi, text
         # multi: *args = choices
         # likert_1, likert_2: *args = q_Low, q_High
-        Tools.survey.addQuestion(qt.text, 'Thanks for your feedback. What could we do to improve?', act.neutral, None)
+
+        #id=0
+        Tools.survey.addQuestion(qt.text, 'Thanks for your feedback. What else could we do to improve the overall search experience?', act.neutral, None)
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.allpages)
-        
-        Tools.survey.addQuestion(qt.likert_1, 'How familiar are you with this website?', act.neutral, None, 'not familiar', 'very familiar')
+
+        #id=1
+        Tools.survey.addQuestion(qt.multi, 'How often do you usually access the PMR?', act.neutral, None, 'On a daily basis', 'Several times every week', 'First time user or very rarely')
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.general)
-        
-        Tools.survey.addQuestion(qt.multi, 'How often do you usually access this website in a month?', act.neutral, None, '< 5 times', '5 - 10 times', '11 - 20 times', '> 20 times')
-        Tools.survey.setLastQuestionPages(ap.oneForAll, pt.general)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'How familiar you are with the topic you are looking for?', act.neutral, None, 'not familiar', 'very familiar')
+
+        #id=2
+        Tools.survey.addQuestion(qt.likert_1, 'I have a particular biomedical domain of interest (e.g. cardiovascular, gastrointestinal, immunology, etc).', act.neutral, None, 'no interes', 'strong interest')
         Tools.survey.setLastQuestionPages(ap.onePerSession, pt.search,pt.browse)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'In what level, you need a snippet for each model?', act.neutral, None, 'i do not need it', 'i really need it')
+
+        #id=3
+        Tools.survey.addQuestion(qt.likert_1, 'I have a particular biophysical mechanism of interest (e.g. electrophysiology, ion transport, gene regulation, etc).', act.neutral, None, 'no interes', 'strong interest')
+        Tools.survey.setLastQuestionPages(ap.onePerSession, pt.search,pt.browse)
+
+        #id=4
+        Tools.survey.addQuestion(qt.likert_2, 'A concise informative snippet is needed for each model presented in the result list.', act.neutral, None, 'strongly disagree', 'strongly agree')
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.search)
-        
-        Tools.survey.addQuestion(qt.text, 'What kind of information do you required presented by a snippet?', act.neutral, 4)
+
+        #id=5
+        parent = Tools.survey.getLastQuestionId()
+        Tools.survey.addQuestion(qt.multi_w_text, 'What kind of information do you require to be presented by a snippet?', act.neutral, parent, 'biomedical domain', 'biophysical mechanism', 'anatomical location', 'species', 'tissue', 'scale', 'type of maths', 'other (specify)')
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.search)
-        
-        Tools.survey.addQuestion(qt.likert_1, 'In what level, a query suggestion features is useful for you?', act.neutral, None, 'not useful', 'very useful')
+
+        #id=6
+        Tools.survey.addQuestion(qt.likert_1, 'How important a query suggestion feature will be for you?', act.neutral, None, 'not useful at all', 'extremely useful')
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.search)
-        
-        Tools.survey.addQuestion(qt.text, 'Please provide suggestions to improve the presentation of this result list?', act.neutral, None)
-        Tools.survey.setLastQuestionPages(ap.oneForAll, pt.search)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'In what level, you are satisfied with the results list?', act.neutral, None, 'not satisfy', 'very satisfy')
+
+        #id=7
+        Tools.survey.addQuestion(qt.likert_2, 'How satisfied are you with the content of the results list?', act.neutral, None, 'not satisfied at all', 'extremely satisfied')
         Tools.survey.setLastQuestionPages(ap.onePerSession, pt.search)
-        
-        Tools.survey.addQuestion(qt.multi, 'Regarding your information needs, which link on this page is the most suitable for you?', act.neutral, None, 'documentation', 'model metadata', 'model curation', 'mathematics', 'generated code', 'cite this model', 'source view', 'other')
+
+        #id=8
+        Tools.survey.addQuestion(qt.likert_2, 'How satisfied are you with the presentation of the results list?', act.neutral, None, 'not satisfied at all', 'extremely satisfied')
+        Tools.survey.setLastQuestionPages(ap.onePerSession, pt.search)
+
+        #id=9
+        Tools.survey.addQuestion(qt.multi_w_text, 'Regarding your information needs which link on this page is the most suitable for you?', act.neutral, None, 'documentation', 'model metadata', 'model curation', 'mathematics', 'generated code', 'cite this model', 'source view', 'other (specify)')
         Tools.survey.setLastQuestionPages(ap.onePerSession, pt.file)
-        
-        Tools.survey.addQuestion(qt.multi, 'Regarding your information needs, which part on this page is the most suitable for you?', act.neutral, None, 'model status', 'model structure', 'schematic diagram', 'original paper', 'reference', 'other')
+
+        #id=10
+        Tools.survey.addQuestion(qt.multi_w_text, 'Regarding your information needs which part on this page is the most suitable for you?', act.neutral, None, 'model status', 'model structure', 'schematic diagram', 'original paper', 'reference', 'other (specify)')
         Tools.survey.setLastQuestionPages(ap.onePerSession, pt.document,pt.file)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'How relevant is this page to the information you are looking for?', act.search, None, 'not satisfy', 'very satisfy')
+
+        #id=11
+        Tools.survey.addQuestion(qt.likert_2, 'How relevant are the results to the information you are looking for?', act.search, None, 'not relevant at all', 'extremely relevant')
         Tools.survey.setLastQuestionPages(ap.onePerSessionPage, pt.document,pt.file)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'If this is the page you are looking for, how fast can you get this page?', act.search, None, 'very slow', 'very vast')
+
+        #id=12
+        Tools.survey.addQuestion(qt.likert_2, 'If this is the page you are looking for how fast can you get this page?', act.search, None, 'extremely slow', 'extremely fast')
         Tools.survey.setLastQuestionPages(ap.onePerSessionPage, pt.document,pt.file)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'If this is the page you are looking for, how easy do you get this page?', act.search, None, 'very difficult', 'very easy')
+
+        #id=13
+        Tools.survey.addQuestion(qt.likert_2, 'If this is the page you are looking for how easy/intuitive was it to get to this page?', act.search, None, 'extremely difficult', 'extremely easy')
         Tools.survey.setLastQuestionPages(ap.onePerSessionPage, pt.document,pt.file)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'How easy is it to get your intended information?', act.search, None, 'very difficult', 'very easy')
+
+        #id=14
+        Tools.survey.addQuestion(qt.likert_2, 'If you used the browse feature instead of searching how easy was is it to find information you were looking?', act.browse, None, 'extremely difficult', 'extremely easy')
         Tools.survey.setLastQuestionPages(ap.onePerSessionPage, pt.document,pt.file)
-        
-        Tools.survey.addQuestion(qt.likert_2, 'If you are looking for information using browse facility and if this is the page you are looking for, how easy is it to find information with browsing facilities compared to search facilities?', act.browse, None, 'very difficult', 'very easy')
-        Tools.survey.setLastQuestionPages(ap.onePerSessionPage, pt.document,pt.file)
-        
+
         return Tools.survey

@@ -57,9 +57,6 @@ class User(Implicit, Persistent, RoleManager, Item):
                 return session.isAnswered(questionId, **kwargs)
         return False
     
-    def getAnswers(self):
-        return self._answered
-    
     def getAnswerList(self):
         answerList = []
         answerList.append([self._userId,self._isActive])
