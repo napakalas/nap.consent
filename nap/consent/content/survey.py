@@ -12,22 +12,23 @@ from zope.annotation.interfaces import IAnnotations
 from plone import api
 from .user import User
 from BTrees.OOBTree import OOBTree
+from .question import Activity as act
 
-class PType:        #
-    browse = 0
-    search = 1
-    general = 2
-    document = 3
-    file = 4
-    allpages = 5
+class PType:        # page type -> the type page a question will appear
+    browse = 0      # page: ['workspacecontainer at', 'exposurecontainer at'] ['calcium_dynamics', 'cardiovascular_circulation', 'cell_cycle', 'cell_migration', 'circadian_rhythms', 'electrophysiology', 'endocrine', 'excitation-contraction_coupling', 'gene_regulation', 'hepatology', 'immunology', 'ion_transport', 'mechanical_constitutive_laws', 'metabolism', 'myofilament_mechanics', 'neurobiology', 'ph_regulation', 'pkpd', 'protein_modules', 'signal_transduction', 'synthetic_biology']
+    search = 1      # page: ['search.pt']
+    general = 2     # page: other page
+    document = 3    # page: ['workspace at', 'exposure at']
+    file = 4        # page: ['exposurefile at']
+    allpages = 5    # page: all kind of pages including all mentioned
 
-class Appear:
-    oneForAll = 0
-    onePerSession = 1
-    onePerSessionPage = 2
+class Appear:                   # the appearance of a question
+    oneForAll = 0               # appear one time for each participant
+    onePerSession = 1           # appear one time per session
+    onePerSessionPage = 2       # appear one time per session per page
+
 
 class Survey(Implicit, Persistent, RoleManager, Item):
-
     security = ClassSecurityInfo()
     checkNumAnswer = 10
     checkNumAnswerSes = 5
@@ -116,11 +117,11 @@ class Survey(Implicit, Persistent, RoleManager, Item):
             for questionId in self._questionPType[pType]:
                 if questionId in self._questionAppear[Appear.onePerSession]:
                     if not self.isAnswered(questionId, userId, sessionId=sessionId):
-                        if self._questions[questionId].getActivity() == activity:
+                        if self._questions[questionId].getActivity() == activity or self._questions[questionId].getActivity() == act.neutral:
                             available.append(questionId)
                 elif questionId in self._questionAppear[Appear.onePerSessionPage]:
                     if not self.isAnswered(questionId, userId, sessionId=sessionId, context=context):
-                        if self._questions[questionId].getActivity() == activity:
+                        if self._questions[questionId].getActivity() == activity or self._questions[questionId].getActivity() == act.neutral:
                             available.append(questionId)
             if len(available) > 0:
                 return self._questions[random.choice(available)]

@@ -74,11 +74,13 @@ Installation step on the PMR:
  - Textual question
    ![add-on multiple](readmeimgs/9.png)
 
-## Accessing data:
+## Accessing and deleting data:
  - Download survey results
     - Access @@survey_result_form
     - Press **Download Feedback** link
       ![add-on multiple](readmeimgs/10.png)
+    - Example of downloaded data
+      
 
  - Erase data from server
     - Be careful in this step, since the deleted data is not rediscoverable.

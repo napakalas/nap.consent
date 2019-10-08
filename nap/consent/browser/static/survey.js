@@ -15,7 +15,6 @@ $(document).ready(function() {
 
   $("#radio-multi-text input[name='radioLikert']").click(function(event) {
     var radioValue = $("input[name='radioLikert']:checked").val();
-    alert();
     if (radioValue == "other (specify)") {
       $("#text-answer").prop("disabled", false);
       $("#text-answer").focus();
@@ -93,7 +92,6 @@ $(window).bind("pageshow", function(event) {
 });
 
 function showWithdraw() {
-  //alert("show withdraw");
   $("#question-type").hide();
   $("#withdraw-div").show();
 }
