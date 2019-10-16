@@ -1,5 +1,6 @@
 $(document).ready(function() {
   "use strict";
+
   var d = new Date();
   d.setMonth(d.getMonth() + 3);
   var expMonth = new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -7,13 +8,18 @@ $(document).ready(function() {
   var isAgree = $("#viewlet-survey").attr("isAgree");
   var enabled = $("#viewlet-consent").attr("data-enabled");
   var isQstAvailable = $("#viewlet-survey").attr("isQstAvailable");
-  if (isAgree === "true" && enabled === "true" && isQstAvailable === "true" && getCookie("_q_answer") === "\"\"") {
+  if (isAgree === "true" && enabled === "true" && isQstAvailable === "true" && getCookie("_q_answer") === "") {
     $("#viewlet-survey").show();
+    $('#q-text').text(getCookie("_q_text")); //set question
+    // set query form
+    var q_type = getCookie("_q_type")
+    sefForm(q_type);
+    // deleteCookies();
   } else {
     return;
   }
 
-  $("#radio-multi-text input[name='radioLikert']").click(function(event) {
+  $("#radio-multi input[name='radioLikert']").click(function(event) {
     var radioValue = $("input[name='radioLikert']:checked").val();
     if (radioValue == "other (specify)") {
       $("#text-answer").prop("disabled", false);
@@ -30,12 +36,15 @@ $(document).ready(function() {
     var text = document.getElementById('text-answer');
     var answer = "";
     if (radios) {
-      answer += $("input[name='radioLikert']:checked").val();
+      var choiced = $("input[name='radioLikert']:checked").val();
+      answer += choiced;
     }
     if (text) {
       answer += text.value;
     }
-    if (answer !== "undefined" && answer !== "") {
+    answer = answer.replace(/other \(specify\)/g, "");
+    answer = answer.replace(/undefined/g,"");
+    if (answer !== "") {
       document.cookie = "_q_answer=" + answer + "; expires=" + expMonth + "; path=/";
       $("#viewlet-survey").hide();
     }
@@ -56,29 +65,31 @@ $(document).ready(function() {
   });
 
   resizeViewlet();
+
 });
 
 $(window).bind("pageshow", function(event) {
   // check status first
   var status = localStorage.getItem("cns-status");
-  if (status !== null){
-    if (status === "activated"){
+  if (status !== null) {
+    if (status === "activated") {
       var d = new Date();
       d.setMonth(d.getMonth() + 3);
       var expMonth = new Date(d.getFullYear(), d.getMonth(), d.getDate());
       /** DETECT AND RECORD FORWARD AND BACKWARD NAVIGATION **/
       // 3 is neutral, 1 is back, 2 is next
       var _nav = getCookie("_nav");
-      if (_nav === "\"0\"") {        //initial condition
+
+      if (_nav === "0") { //initial condition
         _nav = "3";
-      }else{
+      } else {
         url_preff = localStorage.getItem("url_preff");
         url_curr = localStorage.getItem("url_curr");
-        if (url_curr !== document.URL && url_preff !== document.referrer){ // press back or next
-          if(url_preff === document.URL){ // press back -- but there is a condition
-            _nav += "1";                  // that can be mistakenly identify as press back
-          }else{
-            _nav += "2";      // press forward
+        if (url_curr !== document.URL && url_preff !== document.referrer) { // press back or next
+          if (url_preff === document.URL) { // press back -- but there is a condition
+            _nav += "1"; // that can be mistakenly identify as press back
+          } else {
+            _nav += "2"; // press forward
           }
         }
       }
@@ -106,19 +117,94 @@ function getCookie(cname) {
       c = c.substring(1);
     }
     if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
+      var text = c.substring(name.length, c.length).replace("\"","").replace("\"","");
+      return text;
     }
   }
   return "";
 }
 
-function resizeViewlet(){
+function resizeViewlet() {
   var radio_multi_text = document.getElementById('radio-multi-text');
   var radio_multi = document.getElementById('radio-multi');
-  if (radio_multi_text || radio_multi){
+  if (radio_multi_text || radio_multi) {
 
     var width = document.body.clientWidth;
     document.getElementById("viewlet-survey").style.marginLeft = "250px";
     document.getElementById("viewlet-survey").style.width = "350px";
   }
+}
+
+function likert(q_type) {
+  var choices = getCookie("_q_choices");
+  choices = choices.substring(2, choices.length-2).split("', '");
+  var text = '<div id="q-likert" class="likert-answer">' +
+    '<div class="likert-answer">' +
+    '<span id="q-low">'+getCookie("_q_low")+'</span>&nbsp;' +
+    '<span>';
+  for (var i = 0; i < choices.length; i++){
+    text += '<input type="radio" id="'+choices[i]+'" name="radioLikert" value="'+choices[i]+'">' +
+            '<label for="'+choices[i]+'">'+choices[i]+'</label>';
+  }
+  text += '</span>' +
+    '&nbsp;<span id="q-high">'+getCookie("_q_high")+'</span>';
+  if (q_type === "1"){
+    text += '<span>' +
+      '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+      '<input type="radio" id="radioNA" name="radioLikert" value="NA">' +
+        '<label for="radioNA">N/A</label>' +
+    '</span>';
+  }
+  text += '</div></div>';
+  return text;
+}
+
+function textAnswer() {
+  var text = '<div class="text-answer">'+
+    '<textarea id="text-answer" rows="2" cols="50" maxlength="100"></textarea>' +
+  '</div>';
+  return text;
+}
+
+function radioMulti(q_type) {
+  var choices = getCookie("_q_choices");
+  choices = choices.substring(2, choices.length-2).split("', '");
+  var text = '<div id="radio-multi" class="multi-answer">';
+  for (var i = 0; i < choices.length; i++){
+    text += '<div>' +
+        '<input type="radio" id="' +choices[i]+'" name="radioLikert" value="'+choices[i]+'">' +
+        '<label for="' + choices[i] + '">' + choices[i] +'</label>' +
+    '</div>';
+  }
+  if (q_type === "4"){
+    text += '<div>' +
+      '<textarea disabled id="text-answer" maxlength="70"></textarea>' +
+    '</div>';
+  }
+  text += '</div>';
+  return text;
+}
+
+function sefForm(q_type){
+  // if question type is likert
+  if (q_type === "0" || q_type === "1"){
+    $('#q-form').html(likert(q_type));
+  }
+  // if question type is text answer
+  if (q_type === "3"){
+    $('#q-form').html(textAnswer());
+  }
+
+  // if question type is radio multi or with text
+  if (q_type === "2" || q_type === "4"){
+    $('#q-form').html(radioMulti(q_type));
+  }
+}
+
+function deleteCookies(){
+  document.cookie = "_q_text=; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+  document.cookie = "_q_type=; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+  document.cookie = "_q_choices=; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+  document.cookie = "_q_low=; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+  document.cookie = "_q_high=; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
 }

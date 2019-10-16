@@ -1,54 +1,71 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      lang="en"
-      metal:use-macro="here/main_template/macros/master"
-      i18n:domain="ora.objects"
-      tal:define="foo view/update">
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" metal:use-macro="here/main_template/macros/master" i18n:domain="ora.objects" tal:define="foo view/update">
+  <body>
     <div metal:fill-slot="main">
-        <tal:main-macro metal:define-macro="main">
+      <tal:main-macro metal:define-macro="main">
 
-                <h1 class="documentFirstHeading">
-                    Feedback Summary and Download
-                </h1>
+        <div class="delimiter"  tal:define="link view/getDownloadLink;" tal:condition="python: link != ''">
+          <h1 class="documentFirstHeading">
+            Feedback Summary and Download
+          </h1>
+          <p>
+            You can download the result by pressing download link.
+          </p>
+        </div>
 
-                <p class="documentDescription">
-                    You can download the result by pressing download button. Be careful with Clean up button !!! It will erase all feedback.
-                </p>
+        <div class="delimiter"  tal:define="link view/getDownloadLink;" tal:condition="python: link != ''">
+          <!-- <a href="link" tal:attributes="href view/getDownloadLink"> -->
+            <button name="downloadall" onclick="" tal:attributes="onclick  view/getDownloadLink;">Download Feedback</button>
+          <!-- </a> -->
+          Password <input type="password" id="input-password" name="text-password" minlength="8">
+        </div>
 
-                <div tal:define="summary view/getSummary">
-                    <div tal:repeat="rep summary" tal:content="rep"></div>
-                </div>
-                <br>
-                <br>
-                <div>
-                <a href="link" tal:attributes="href view/getDownloadLink"> Download Feedback </a>
-                </div>
-                <br>
-                <br>
-                <input type="checkbox" id="clean-checkbox" onclick="cleanFunction()">Erase feedback from database<br>
-                <br>
-                <form action="@@survey_result_form" method="POST">
-                    <div id="clean-button" style="display: none" >
-                        <button type="submit" name="clearall">
-                            Be ware, it will clean up all data
-                        </button>
-                    </div>
-                </form>
-                <div tal:define="isCleanUp view/cleanUp" tal:condition="python: isCleanUp == 'True'">Data clear</div>
-                <script>
-                    function cleanFunction() {
-                        var checkBox = document.getElementById("clean-checkbox");
-                        var div = document.getElementById("clean-button");
-                        if (checkBox.checked == true){
-                            $("#clean-button").show();
-                        } else {
-                            $("#clean-button").hide();
-                        }
-                    }
-                </script>
-                
-        </tal:main-macro>
+        <div class="delimiter"  tal:define="isDel view/isDeletable;" tal:condition="python: isDel == True">
+          <form action="@@survey_result_form" method="POST">
+            <div class="delimiter"  tal:define="summary view/getSummary">
+              <div tal:repeat="rep summary" tal:content="rep"></div>
+            </div>
+            <div>
+              <p>Be careful with Clean up button !!! It will erase all feedback.</p>
+              <input type="checkbox" id="clean-checkbox" onclick="cleanFunction()">Erase feedback from database
+            </div>
+            <div id="clean-button" style="display: none">
+              <button type="submit" name="clearall">
+                Be ware, it will clean up all data
+              </button>
+              Password <input type="password" id="input-password" name="passwdDelete" minlength="8">
+            </div>
+          </form>
+          <div tal:content="view/cleanUp">Data clear</div>
+          <script>
+            function cleanFunction() {
+              var checkBox = document.getElementById("clean-checkbox");
+              var div = document.getElementById("clean-button");
+              if (checkBox.checked == true) {
+                $("#clean-button").show();
+              } else {
+                $("#clean-button").hide();
+              }
+            }
+
+
+          </script>
+        </div>
+
+        <script>
+          function downloadAll(link){
+            link = link+"?passwd="+$("#input-password").val();
+            location.href = link;
+          }
+        </script>
+
+        <style>
+          .delimiter {
+              display: block;
+              margin-bottom: 10px;
+          }
+        </style>
+      </tal:main-macro>
     </div>
-    
-</body>
+
+  </body>
 </html>

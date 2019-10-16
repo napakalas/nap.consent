@@ -27,7 +27,6 @@ class Appear:                   # the appearance of a question
     onePerSession = 1           # appear one time per session
     onePerSessionPage = 2       # appear one time per session per page
 
-
 class Survey(Implicit, Persistent, RoleManager, Item):
     security = ClassSecurityInfo()
     checkNumAnswer = 10
@@ -71,60 +70,53 @@ class Survey(Implicit, Persistent, RoleManager, Item):
     def getQuestion(self, context, view, actUrl, userId, sessionId, activity):
         if not self.getUserRecord(userId).isActivated():
             return None
-
         pType = self.getPageType(context, view, actUrl)
+        available = []
         #check ALLPAGES questions
+        #first priority question, presented when match some condition
         if self.getTotFeedback(userId) >= Survey.checkNumAnswer:
             if self.getTotFeedback(userId,sessionId=sessionId) >= Survey.checkNumAnswerSes:
                 for questionId in self._questionPType[PType.allpages]:
-                    if not self.isAnswered(questionId, userId):
-                        return self._questions[questionId]
-        #check GENERAL page questions
+                    available += [questionId] if not self.isAnswered(questionId, userId) else []
+                if len(available) > 0:
+                    return self._questions[random.choice(available)]
+        #check GENERAL  page questions
         if pType is PType.general:
-            #return self._questions[random.choice(self._questionPType[PType.general])]
-            for questionId in self._questionPType[PType.general]:
-                if self.isAnswered(questionId, userId) is False:
-                    return self._questions[questionId]
+            for questionId in self._questionPType[pType]:
+                available += [questionId] if not self.isAnswered(questionId, userId) else []
+
         #check BROWSE page questions
         if pType is PType.browse:
-            for questionId in self._questionPType[PType.browse]:
-                if not self.isAnswered(questionId, userId, sessionId=sessionId):
-                    return self._questions[questionId]
+            for questionId in self._questionPType[pType]:
+                available += [questionId] if not self.isAnswered(questionId, userId, sessionId=sessionId) else []
+
         #check SEARCH page questions
         if pType is PType.search:
-            available = []
-            for questionId in self._questionPType[PType.search]:
+            for questionId in self._questionPType[pType]:
                 if questionId in self._questionAppear[Appear.oneForAll]:
                     if not self.isAnswered(questionId, userId):
                         parentId = self._questions[questionId].getParentId()
-                        if parentId is None:
-                            available.append(questionId)
-                        elif self.isAnswered(parentId, userId):
-                            available.append(questionId)
+                        available += [questionId] if parentId is None else [questionId] if self.isAnswered(parentId, userId) else []
                 elif questionId in self._questionAppear[Appear.onePerSession]:
                     if not self.isAnswered(questionId, userId, sessionId=sessionId):
                         parentId = self._questions[questionId].getParentId()
-                        if parentId is None:
-                            available.append(questionId)
-                        elif self.isAnswered(parentId, userId, sessionId=sessionId):
-                            available.append(questionId)
+                        available += [questionId] if parentId is None else [questionId] if self.isAnswered(parentId, userId, sessionId=sessionId) else []
 
-            if len(available) > 0:
-                return self._questions[random.choice(available)]
         #check DOCUMENT or FILE page type
         if pType in [PType.document,PType.file]:
-            available = []
             for questionId in self._questionPType[pType]:
                 if questionId in self._questionAppear[Appear.onePerSession]:
                     if not self.isAnswered(questionId, userId, sessionId=sessionId):
                         if self._questions[questionId].getActivity() == activity or self._questions[questionId].getActivity() == act.neutral:
-                            available.append(questionId)
+                            available += [questionId]
                 elif questionId in self._questionAppear[Appear.onePerSessionPage]:
-                    if not self.isAnswered(questionId, userId, sessionId=sessionId, context=context):
+                    if not self.isAnswered(questionId, userId, sessionId=sessionId, page=actUrl):
                         if self._questions[questionId].getActivity() == activity or self._questions[questionId].getActivity() == act.neutral:
-                            available.append(questionId)
-            if len(available) > 0:
-                return self._questions[random.choice(available)]
+                            available += [questionId]
+
+        if len(available) > 0:
+            available = list(set(available))
+            return self._questions[random.choice(available)]
 
         return None
 
@@ -197,16 +189,13 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         return summary
 
     def cleanUp(self):
-        condition = 'False'
+        numDelete = 0
         users = IAnnotations(api.portal.get())[Survey.KEY]
         for userId in users.keys():
-            try:
-                user = users.pop(userId)
-                del user
-                condition = "True"
-            except:
-                condition = "True"
-        return condition
+            user = users.pop(userId)
+            del user
+            numDelete += 1
+        return numDelete
 
     def disActivateUser(self, userId):
         if self.isUserExist(userId):

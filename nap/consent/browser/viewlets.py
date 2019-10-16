@@ -36,11 +36,13 @@ class ConsentViewlet(ViewletBase):
             return str(api.user.get_current())
 
 class SurveyViewlet(ViewletBase):
+
     def __init__(self, context, request, view, manager):
         super(SurveyViewlet, self).__init__(context, request, view, manager)
 
     def update(self):
         super(SurveyViewlet, self).update()
+
         # GET INFORMATION FROM COOKIE
         r_userId = self.request.cookies.get("_user", -1)
         r_sessionId = self.request.cookies.get("_session", "")
@@ -74,8 +76,12 @@ class SurveyViewlet(ViewletBase):
                 userId = self.getSessionId()
             else:
                 userId = r_userId
-        if r_userId != -1:
-            self.question = survey.getQuestion(self.context, self.view, self.request["ACTUAL_URL"], userId, self.getSessionId(), r_activity)
+
+        # get a new question
+        if r_userId != -1:  # is a participant
+            page = self.request["ACTUAL_URL"]
+            page = page[page.find('pmr')+4:] if 'pmr' in page else page
+            self.question = survey.getQuestion(self.context, self.view, page, userId, self.getSessionId(), r_activity)
         else:
             self.question = None
         self.settings = getUtility(IRegistry).forInterface(IConsentControlPanel)
@@ -95,9 +101,17 @@ class SurveyViewlet(ViewletBase):
         # to track user navigation (back, forward)
         if pageType not in [pt.document,pt.file]:
             self.request.response.setCookie("_nav", "0", expires=expires,  path='/')
-        # set question_Id
+        # set question related cookies
         if self.question is not None:
             self.request.response.setCookie("_q_id", self.question.getId(), expires=expires, path='/')
+            page = self.request["ACTUAL_URL"]
+            page = page[page.find('pmr')+4:] if 'pmr' in page else page
+            self.request.response.setCookie("_page", page, expires=expires, path='/')
+            self.request.response.setCookie("_q_type", self.getQuestionType(), expires=expires, path='/')
+            self.request.response.setCookie("_q_text", self.getQuestionText(), expires=expires, path='/')
+            self.request.response.setCookie("_q_low", self.getLow(), expires=expires, path='/')
+            self.request.response.setCookie("_q_high", self.getHigh(), expires=expires, path='/')
+            self.request.response.setCookie("_q_choices", self.getChoices(), expires=expires, path='/')
         else:
             self.request.response.setCookie("_q_id", "-1", expires=expires, path='/')
         # set answer
@@ -107,12 +121,8 @@ class SurveyViewlet(ViewletBase):
         # set query
         if pageType not in [pt.document,pt.file]:
             self.request.response.setCookie("_query", self.request["QUERY_STRING"], expires=expires, path='/')
-        # set page
-        self.request.response.setCookie("_page", self.request["ACTUAL_URL"], expires=expires, path='/')
 
-    """
-    DATA OUT FOR CLIENT
-    """
+    """ DATA OUT FOR CLIENT """
     def enabled(self):
         """Check whether the consent should be shown or not."""
         return str(self.settings.enabled).lower()
@@ -122,6 +132,13 @@ class SurveyViewlet(ViewletBase):
             return "false"
         return "true"
 
+    def isQstAvailable(self):
+        if self.question is not None:
+            return "true"
+        else:
+            return "false"
+
+    """ FUNCTION FOR SUPPLY COOKIES DATA """
     def getBrowserId(self):
         sdm = self.context.session_data_manager
         browser_id = sdm.getBrowserIdManager().getBrowserId()
@@ -146,12 +163,3 @@ class SurveyViewlet(ViewletBase):
 
     def getChoices(self):
         return self.question.getChoices()
-
-    def isQstAvailable(self):
-        if self.question is not None:
-            return 'true'
-        else:
-            return 'false'
-
-
-    #END OF DATA OUT FOR CLIENT#

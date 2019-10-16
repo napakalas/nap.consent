@@ -28,11 +28,11 @@ class Tools:
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.general)
 
         #id=2
-        Tools.survey.addQuestion(qt.likert_1, 'I have a particular biomedical domain of interest (e.g. cardiovascular, gastrointestinal, immunology, etc).', act.neutral, None, 'no interes', 'strong interest')
+        Tools.survey.addQuestion(qt.likert_1, 'I have a particular biomedical domain of interest (e.g. cardiovascular, gastrointestinal, immunology, etc).', act.neutral, None, 'no interest', 'strong interest')
         Tools.survey.setLastQuestionPages(ap.onePerSession, pt.search,pt.browse)
 
         #id=3
-        Tools.survey.addQuestion(qt.likert_1, 'I have a particular biophysical mechanism of interest (e.g. electrophysiology, ion transport, gene regulation, etc).', act.neutral, None, 'no interes', 'strong interest')
+        Tools.survey.addQuestion(qt.likert_1, 'I have a particular biophysical mechanism of interest (e.g. electrophysiology, ion transport, gene regulation, etc).', act.neutral, None, 'no interest', 'strong interest')
         Tools.survey.setLastQuestionPages(ap.onePerSession, pt.search,pt.browse)
 
         #id=4

@@ -6,7 +6,7 @@
   <include package="plone.app.contentmenu" />
 
   <!-- -*- extra stuff goes here -*- -->
-  
+
   <browser:page
       name="consent-controlpanel"
       for="*"
@@ -14,13 +14,13 @@
       permission="cmf.ManagePortal"
       layer=".controlpanel.IBrowserLayer"
   />
-  
+
   <browser:resourceDirectory
       directory="static"
       name="nap.consent"
       layer=".controlpanel.IBrowserLayer"
   />
-  
+
   <browser:viewlet
       name="nap.consent"
       manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
@@ -29,7 +29,7 @@
       permission="zope2.View"
       layer=".controlpanel.IBrowserLayer"
   />
-  
+
   <browser:viewlet
       name="nap.survey"
       manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
@@ -38,7 +38,7 @@
       permission="zope2.View"
       layer=".controlpanel.IBrowserLayer"
   />
-  
+
   <browser:viewlet
       name="nap.consent.pmr"
       manager="cellml.theme.browser.interfaces.ICellMLStickyFooter"
@@ -47,7 +47,7 @@
       permission="zope2.View"
       layer=".controlpanel.IBrowserLayer"
   />
-  
+
   <browser:viewlet
       name="nap.survey.pmr"
       manager="cellml.theme.browser.interfaces.ICellMLStickyFooter"
@@ -56,21 +56,21 @@
       permission="zope2.View"
       layer=".controlpanel.IBrowserLayer"
   />
-  
+
   <browser:page
       for="Products.CMFCore.interfaces.ISiteRoot"
       name="survey_result_form"
-      permission="cmf.ManagePortal"
+      permission="zope2.View"
       class=".surveyResult.SurveyResultView"
       template="surveyResult.pt"
   />
-  
+
   <browser:view
       for="Products.CMFCore.interfaces.ISiteRoot"
       name="survey_csv"
-      permission="cmf.ManagePortal"
+      permission="zope2.View"
       class=".surveyResult.SurveyCsv"
   />
-  
-    
+
+
 </configure>

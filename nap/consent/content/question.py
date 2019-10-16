@@ -8,16 +8,16 @@ from OFS.SimpleItem import Item
 
 
 class QType:
-    likert_1 = 0        # likert question with answers between a and b
-    likert_2 = 1        # likert question with answers between a and b, and not available option
-    multi = 2           # multiple choice question
-    text = 3            # question needing text answer
-    multi_w_text = 4    # multiple choice question with text field for other answer
+    likert_1 = 0        #likert question with answers between a and b
+    likert_2 = 1        #likert question with answers between a and b, and not available option
+    multi = 2           #multiple choice question
+    text = 3            #question needing text answer
+    multi_w_text = 4    #multiple choice question with text field for other answer
 
 class Activity:
-    browse = 0          # question appears in browsing activity
-    search = 1          # question appears in searching activity
-    neutral = 3         # question appears in all activity
+    browse = 0          #question appears in browsing activity
+    search = 1          #question appears in searching activity
+    neutral = 3         #question appears in browse activity
 
 
 class Question(Implicit, Persistent, RoleManager, Item):

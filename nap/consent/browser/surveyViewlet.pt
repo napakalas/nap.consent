@@ -3,45 +3,15 @@
     isAgree view/isAgree;
     isQstAvailable view/isQstAvailable;
   ">
+
   <link href="survey.css" rel="stylesheet" tal:attributes="href string:${view/site_url}/++resource++nap.consent/survey.css">
   <div id="question-type" tal:define="isQstAvailable view/isQstAvailable" tal:condition="python: isQstAvailable == 'true'">
-    <div class="question" tal:content="view/getQuestionText">
+
+    <div id="q-text" class="question">
       How familiar are you with this website?
     </div>
 
-    <div class="likert-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 0 or qstType == 1">
-      <span tal:content="view/getLow">low level</span>
-      <span tal:repeat="choice choices">
-        <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
-        <label for="radio0" tal:content="choice" tal:attributes="for choice;">0</label>
-      </span>
-      <span tal:content="view/getHigh">high level</span>
-      <span tal:define="qstTpy view/getQuestionType" tal:condition="python: qstTpy == 1">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="radio" id="radioNA" name="radioLikert" value="NA">
-          <label for="radioNA">N/A</label>
-      </span>
-    </div>
-
-    <div class="text-answer" tal:define="qstType view/getQuestionType" tal:condition="python: qstType == 3">
-      <textarea id="text-answer" rows="2" cols="50" maxlength="100"></textarea>
-    </div>
-
-    <div id="radio-multi" class="multi-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 2">
-        <div tal:repeat="choice choices">
-            <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
-            <label for="radio0" tal:content="choice" tal:attributes="for choice;">documentation</label>
-        </div>
-    </div>
-
-    <div id="radio-multi-text" class="multi-answer" tal:define="qstType view/getQuestionType; choices view/getChoices;" tal:condition="python: qstType == 4">
-      <div tal:repeat="choice choices">
-        <input type="radio" id="radio0" name="radioLikert" value="0" tal:attributes="id choice; value choice;">
-        <label for="radio0" tal:content="choice" tal:attributes="for choice;">documentation</label>
-      </div>
-      <div>
-        <textarea disabled id="text-answer" maxlength="70"></textarea>
-      </div>
+    <div id="q-form">
     </div>
 
     <div class="button-submit">

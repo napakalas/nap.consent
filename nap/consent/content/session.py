@@ -10,7 +10,7 @@ from BTrees.OOBTree import OOBTree
 from BTrees.OOBTree import OOTreeSet
 
 class Session(Implicit, Persistent, RoleManager, Item):
-    
+
     def __init__(self,sessionId):
         self._sessionId = sessionId
         self._questionId = OOBTree()
@@ -20,8 +20,8 @@ class Session(Implicit, Persistent, RoleManager, Item):
         self._loginStatus = OOBTree()
         self._page = OOBTree()
         self._query = OOBTree()
-        self._questionContextSet = OOTreeSet()
-        
+        self._qstPage = OOTreeSet()
+
     def addAnswer(self, questionId, answer, nav, time, context, loginStatus, page, query):
         if not self._questionId.has_key(time):
             self._questionId[time] = questionId
@@ -31,29 +31,24 @@ class Session(Implicit, Persistent, RoleManager, Item):
             self._loginStatus[time] = loginStatus
             self._page[time] = page
             self._query[time] = query
-            if not self._questionContextSet.has_key([context,questionId]):
-                self._questionContextSet.insert([context,questionId])
+            self._qstPage.insert(str(questionId)+str(page))
             return True
         return False
-    
+
     def getTotFeedback(self):
         return len(self._questionId)
-    
-    #note: isAnswered(questionId, sessionId=sessionId, context=context)
+
+    #note: isAnswered(questionId, sessionId=sessionId, page=url)
     def isAnswered(self,questionId,**kwargs):
-        if len(kwargs) is 1:
-            if questionId in self._questionId.values():
-                return True
-        elif len(kwargs) is 2:
-            context = kwargs['context']
-            if self._questionContextSet.has_key([context,questionId]):
-                return True
-        return False
-    
+        if 'page' in kwargs:
+            qstPage = str(questionId)+str(kwargs['page'])
+            return True if self._qstPage.has_key(qstPage) else False
+        else:
+            return True if questionId in self._questionId.values() else False
+
     def getAnswerList(self):
         answers = []
         for time in self._questionId.keys():
             tmp = [self._sessionId, time, self._questionId.get(time), self._answer.get(time), self._nav.get(time), self._context.get(time), self._loginStatus.get(time), self._page.get(time), self._query.get(time)]
             answers.append(tmp)
         return answers
-    
