@@ -48,7 +48,7 @@
       <button class="button_survey" name="nap.consent.bt.submit" i18n:translate="title_button_submit">
         <span>Submit</span>
       </button>
-      <a href="#" onclick="showWithdraw()">withdraw from survey</a>
+      <a onclick="showWithdraw()">withdraw from survey</a>
     </div>
   </div>
 

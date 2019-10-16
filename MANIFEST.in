@@ -1,2 +1,4 @@
 recursive-include nap *
 global-exclude *pyc
+global-include *rst
+global-include *txt
