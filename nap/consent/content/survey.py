@@ -130,6 +130,7 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         wordsDocument = ['workspace at', 'exposure at']
         wordsBrowser = ['workspacecontainer at', 'exposurecontainer at']
         wordsBrowserUrl = ['calcium_dynamics', 'cardiovascular_circulation', 'cell_cycle', 'cell_migration', 'circadian_rhythms', 'electrophysiology', 'endocrine', 'excitation-contraction_coupling', 'gene_regulation', 'hepatology', 'immunology', 'ion_transport', 'mechanical_constitutive_laws', 'metabolism', 'myofilament_mechanics', 'neurobiology', 'ph_regulation', 'pkpd', 'protein_modules', 'signal_transduction', 'synthetic_biology']
+        wordsBrowserExp = ['.org/e','.org/exposure']
         if any(word in view for word in wordsSearch):
             return PType.search
         elif any(word in context for word in wordsFile):
@@ -139,6 +140,8 @@ class Survey(Implicit, Persistent, RoleManager, Item):
         elif any(word in context for word in wordsBrowser):
             return PType.browse
         elif any(word in actUrl for word in wordsBrowserUrl):
+            return PType.browse
+        elif any(actUrl.endswith(word) for word in wordsBrowserExp):
             return PType.browse
         else:
             return PType.general

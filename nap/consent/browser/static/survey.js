@@ -105,6 +105,10 @@ $(window).bind("pageshow", function(event) {
 function showWithdraw() {
   $("#question-type").hide();
   $("#withdraw-div").show();
+  if ($("#withdraw-div").width() < 500){
+    document.getElementById("viewlet-survey").style.marginLeft = "0px";
+    document.getElementById("viewlet-survey").style.width = "600px";
+  }
 }
 
 function getCookie(cname) {
