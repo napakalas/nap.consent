@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="nap.consent">
+
+  <permission
+      id="nap.consent.security.SurveyAdmin"
+      title="Nap Consent Survey Administrator"
+      />
+
+</configure>
