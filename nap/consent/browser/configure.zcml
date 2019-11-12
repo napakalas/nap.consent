@@ -4,6 +4,7 @@
     i18n_domain="nap.consent">
 
   <include package="plone.app.contentmenu" />
+  <include package="nap.consent.security" />
 
   <!-- -*- extra stuff goes here -*- -->
 
@@ -60,7 +61,7 @@
   <browser:page
       for="Products.CMFCore.interfaces.ISiteRoot"
       name="survey_result_form"
-      permission="zope2.View"
+      permission="nap.consent.security.SurveyAdmin"
       class=".surveyResult.SurveyResultView"
       template="surveyResult.pt"
   />
@@ -68,7 +69,7 @@
   <browser:view
       for="Products.CMFCore.interfaces.ISiteRoot"
       name="survey_csv"
-      permission="zope2.View"
+      permission="nap.consent.security.SurveyAdmin"
       class=".surveyResult.SurveyCsv"
   />
 
