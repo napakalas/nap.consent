@@ -2,6 +2,7 @@
     data-enabled view/enabled;
     isAgree view/isAgree;
     isQstAvailable view/isQstAvailable;
+    generalQuestion view/getGeneralQuestion;
   ">
 
   <link href="survey.css" rel="stylesheet" tal:attributes="href string:${view/site_url}/++resource++nap.consent/survey.css">
@@ -15,10 +16,17 @@
     </div>
 
     <div class="button-submit">
-      <button class="button_survey" name="nap.consent.bt.submit" i18n:translate="title_button_submit">
-        <span>Submit</span>
-      </button>
-      <a onclick="showWithdraw()">withdraw from survey</a>
+      <div style="float:left;">
+        <button class="button_survey" name="nap.consent.bt.submit" i18n:translate="title_button_submit">
+          <span>Submit</span>
+        </button>
+      </div>
+      <div id="links" style="float:left;margin-top: 10px;">
+          <div><a onclick="showGeneralQuestion()" style="font-weight: bold; color: white">give textual feedback</a></div>
+          <div><a onclick="showWithdraw()">withdraw from survey</a></div>
+      </div>
+
+
     </div>
   </div>
 

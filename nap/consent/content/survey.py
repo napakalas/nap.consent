@@ -67,6 +67,12 @@ class Survey(Implicit, Persistent, RoleManager, Item):
     def getQuestionTot(self):
         return len(self._questions)
 
+    def getGeneralQuestion(self):
+        available = []
+        for questionId in self._questionPType[PType.allpages]:
+            available += [questionId]
+        return self._questions[random.choice(available)]
+
     def getQuestion(self, context, view, actUrl, userId, sessionId, activity):
         if not self.getUserRecord(userId).isActivated():
             return None

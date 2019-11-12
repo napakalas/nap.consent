@@ -192,3 +192,7 @@ class SurveyViewlet(ViewletBase):
 
     def getChoices(self):
         return self.question.getChoices()
+
+    def getGeneralQuestion(self):
+        general_question = Tools.survey.getGeneralQuestion()
+        return general_question.getId(), general_question.getType(), general_question.getQuestionText()

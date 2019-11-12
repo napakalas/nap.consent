@@ -44,6 +44,7 @@ $(document).ready(function() {
     }
     answer = answer.replace(/other \(specify\)/g, "");
     answer = answer.replace(/undefined/g,"");
+    answer = answer.replace(/\n/g, ' ');
     if (answer !== "") {
       document.cookie = "_q_answer=" + answer + "; expires=" + expMonth + "; path=/";
       $("#viewlet-survey").hide();
@@ -53,6 +54,7 @@ $(document).ready(function() {
   $("button[name='nap.consent.bt.abort']").click(function(event) {
     $("#withdraw-div").hide();
     $("#question-type").show();
+    resizeViewlet();
   });
 
   //withdraw from survey
@@ -105,10 +107,34 @@ $(window).bind("pageshow", function(event) {
 function showWithdraw() {
   $("#question-type").hide();
   $("#withdraw-div").show();
-  if ($("#withdraw-div").width() < 500){
+  if ($("#viewlet-survey").width() < 500){
     document.getElementById("viewlet-survey").style.marginLeft = "0px";
     document.getElementById("viewlet-survey").style.width = "600px";
   }
+}
+
+function showGeneralQuestion(){
+  var d = new Date();
+  d.setMonth(d.getMonth() + 3);
+  var expMonth = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+  var question = $("#viewlet-survey").attr("generalQuestion");
+  question = question.substring(1,question.length-1)
+  var attrs = question.split(", ");
+
+  document.cookie = "_q_id=\"" + attrs[0] + "\"; expires=" + expMonth + "; path=/";
+  document.cookie = "_q_type=\"" + attrs[1] + "\"; expires=" + expMonth + "; path=/";
+  document.cookie = "_q_text=\"" + attrs[2] + "\"; expires=" + expMonth + "; path=/";
+  document.cookie = "_q_choices=\"\"; expires=" + expMonth + "; path=/";
+  document.cookie = "_q_high=\"\"; expires=" + expMonth + "; path=/";
+  document.cookie = "_q_low=\"\"; expires=" + expMonth + "; path=/";
+  document.cookie = "_q_answer=\"\"; expires=" + expMonth + "; path=/";
+
+  $('#q-text').text(getCookie("_q_text"));
+  var q_type = getCookie("_q_type")
+  sefForm(q_type);
+  document.getElementById("viewlet-survey").style.marginLeft = "250px";
+  document.getElementById("viewlet-survey").style.width = "350px";
 }
 
 function getCookie(cname) {
@@ -132,8 +158,6 @@ function resizeViewlet() {
   var radio_multi_text = document.getElementById('radio-multi-text');
   var radio_multi = document.getElementById('radio-multi');
   if (radio_multi_text || radio_multi) {
-
-    var width = document.body.clientWidth;
     document.getElementById("viewlet-survey").style.marginLeft = "250px";
     document.getElementById("viewlet-survey").style.width = "350px";
   }
@@ -165,7 +189,7 @@ function likert(q_type) {
 
 function textAnswer() {
   var text = '<div class="text-answer">'+
-    '<textarea id="text-answer" rows="2" cols="50" maxlength="100"></textarea>' +
+    '<textarea id="text-answer" rows="4" cols="100" maxlength="500"></textarea>' +
   '</div>';
   return text;
 }
@@ -190,6 +214,7 @@ function radioMulti(q_type) {
 }
 
 function sefForm(q_type){
+
   // if question type is likert
   if (q_type === "0" || q_type === "1"){
     $('#q-form').html(likert(q_type));
@@ -198,11 +223,18 @@ function sefForm(q_type){
   if (q_type === "3"){
     $('#q-form').html(textAnswer());
   }
-
   // if question type is radio multi or with text
   if (q_type === "2" || q_type === "4"){
     $('#q-form').html(radioMulti(q_type));
   }
+
+  // set link if question is not text answer
+  var links = "";
+  if (q_type !== "3"){
+      links+= '<div><a onclick="showGeneralQuestion()" style="font-weight: bold; color: white">give textual feedback</a></div>';
+  }
+  links += '<div><a onclick="showWithdraw()">withdraw from survey</a></div>';
+  $('#links').html(links);
 }
 
 function deleteCookies(){

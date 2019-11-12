@@ -20,11 +20,11 @@ class Tools:
         # likert_1, likert_2: *args = q_Low, q_High
 
         #id=0
-        Tools.survey.addQuestion(qt.text, 'Thanks for your feedback. What else could we do to improve the overall search experience?', act.neutral, None)
+        Tools.survey.addQuestion(qt.text, 'Thanks for your feedback. What else can we do to improve your PMR experience?', act.neutral, None)
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.allpages)
 
         #id=1
-        Tools.survey.addQuestion(qt.multi, 'How often do you usually access the PMR?', act.neutral, None, 'On a daily basis', 'Several times every week', 'First time user or very rarely')
+        Tools.survey.addQuestion(qt.multi, 'How often do you usually access the PMR?', act.neutral, None, 'On a daily basis', 'Several times every week', 'Several times each month', 'Several times a year', 'First time user or very rarely')
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.general)
 
         #id=2
