@@ -1,3 +1,4 @@
+from random import getrandbits
 from .controlpanel import IConsentControlPanel
 from ..tool import Tools
 from plone.app.layout.viewlets.common import ViewletBase
@@ -47,7 +48,8 @@ class SurveyViewlet(ViewletBase):
 
         # GET INFORMATION FROM COOKIE
         r_userId = self.request.cookies.get("_user", -1)
-        r_sessionId = self.request.cookies.get("_session", "")
+        r_sessionId = self.request.cookies.get(
+            "_session", str(getrandbits(128)))
         try:
             r_questionId = int(self.request.cookies.get("_q_id", -1))
         except:
@@ -83,7 +85,7 @@ class SurveyViewlet(ViewletBase):
         # INITIALISING VIEWLET
         if api.user.is_anonymous():
             if r_userId == 'undefined':
-                userId = self.getSessionId()
+                userId = r_sessionId
             else:
                 userId = r_userId
 
@@ -92,7 +94,7 @@ class SurveyViewlet(ViewletBase):
             page = self.request["ACTUAL_URL"]
             page = page[page.find('pmr') + 4:] if 'pmr' in page else page
             self.question = survey.getQuestion(
-                self.context, self.view, page, userId, self.getSessionId(), r_activity)
+                self.context, self.view, page, userId, r_sessionId, r_activity)
         else:
             self.question = None
         self.settings = getUtility(
@@ -143,13 +145,13 @@ class SurveyViewlet(ViewletBase):
             "_q_answer", "", expires=expires, path='/')
         # set session
         self.request.response.setCookie(
-            "_session", self.getSessionId(), expires=expires, path='/')
+            "_session", r_sessionId, expires=expires, path='/')
         # set query
         if pageType not in [pt.document, pt.file]:
             self.request.response.setCookie(
                 "_query", self.request["QUERY_STRING"], expires=expires, path='/')
 
-    """ DATA OUT FOR CLIENT """
+    # DATA OUT FOR CLIENT
 
     def enabled(self):
         """Check whether the consent should be shown or not."""
@@ -166,17 +168,7 @@ class SurveyViewlet(ViewletBase):
         else:
             return "false"
 
-    """ FUNCTION FOR SUPPLY COOKIES DATA """
-
-    def getBrowserId(self):
-        sdm = self.context.session_data_manager
-        browser_id = sdm.getBrowserIdManager().getBrowserId()
-        return str(browser_id)
-
-    def getSessionId(self):
-        sdm = self.context.session_data_manager
-        session = sdm.getSessionData()
-        return str(session.id)
+    # FUNCTION FOR SUPPLY COOKIES DATA
 
     def getQuestionType(self):
         return self.question.getType()
