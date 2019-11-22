@@ -8,7 +8,9 @@ $(document).ready(function() {
   var isAgree = $("#viewlet-survey").attr("isAgree");
   var enabled = $("#viewlet-consent").attr("data-enabled");
   var isQstAvailable = $("#viewlet-survey").attr("isQstAvailable");
-  if (isAgree === "true" && enabled === "true" && isQstAvailable === "true" && getCookie("_q_answer") === "") {
+  var delay = new Date(localStorage.getItem("cns-delay-until"));
+  var isNotDelay = delay.getTime() > (new Date()).getTime() ? false:true;
+  if (isNotDelay===true && isAgree === "true" && enabled === "true" && isQstAvailable === "true" && getCookie("_q_answer") === "") {
     $("#viewlet-survey").show();
     $('#q-text').text(getCookie("_q_text")); //set question
     // set query form
@@ -64,6 +66,14 @@ $(document).ready(function() {
     localStorage.setItem("cns-status", "deactivated");
     localStorage.setItem("cns-status-date", new Date());
     document.cookie = "_user=; path=/";
+  });
+
+  //close question without showWithdraw
+  $('#close').click(function(event) {
+    this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+    var delayDate = new Date((new Date()).getTime() + 15*60000); //delay next question to 15 minutes
+    localStorage.setItem("cns-delay-until", delayDate);
+    return false;
   });
 
   resizeViewlet();

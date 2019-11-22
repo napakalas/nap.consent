@@ -7,7 +7,7 @@
 
   <link href="survey.css" rel="stylesheet" tal:attributes="href string:${view/site_url}/++resource++nap.consent/survey.css">
   <div id="question-type" tal:define="isQstAvailable view/isQstAvailable" tal:condition="python: isQstAvailable == 'true'">
-
+    <span id='close'>x</span>
     <div id="q-text" class="question">
       How familiar are you with this website?
     </div>
