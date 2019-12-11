@@ -40,8 +40,8 @@ class Tools:
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.search)
 
         #id=5
-        parent = Tools.survey.getLastQuestionId()
-        Tools.survey.addQuestion(qt.multi_w_text, 'What kind of information do you require to be presented by a snippet?', act.neutral, parent, 'biomedical domain', 'biophysical mechanism', 'anatomical location', 'species', 'tissue', 'scale', 'type of maths', 'other (specify)')
+#        parent = Tools.survey.getLastQuestionId()
+        Tools.survey.addQuestion(qt.multi_w_text, 'What kind of information do you require to be presented by a snippet?', act.neutral, None, 'biomedical domain', 'biophysical mechanism', 'anatomical location', 'species', 'tissue', 'scale', 'type of maths', 'other (specify)')
         Tools.survey.setLastQuestionPages(ap.oneForAll, pt.search)
 
         #id=6
